@@ -1,15 +1,8 @@
 package me.suhsaechan.suhapilog.storage;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import me.suhsaechan.suhapilog.model.GithubIssue;
-import me.suhsaechan.suhapilog.storage.IssueRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,9 +11,19 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import me.suhsaechan.suhapilog.model.GithubIssue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * GitHub 이슈 정보를 JSON 파일로 저장하고 조회하는 리포지토리
