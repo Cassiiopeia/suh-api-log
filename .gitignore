@@ -38,3 +38,4 @@ out/
 
 ### Gradle 설정파일 ###
 ./gradle.properties
+/gradle.properties
