@@ -16,9 +16,25 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+          cache-read-only: false
+          gradle-version: wrapper
+
+      - name: Setup Gradle Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Create gradle.properties from secret
         run: |
@@ -32,5 +48,4 @@ jobs:
           TAG_NAME=${GITHUB_REF#refs/tags/}    # 태그명 추출
           VERSION=${TAG_NAME#v}                # 접두사 제거
           echo "Publishing version $VERSION"   # 버전 확인
-          ./gradlew publish -Pversion=$VERSION # Nexus 배포
-
+          ./gradlew publish -Pversion=$VERSION --parallel --build-cache # Nexus 배포
