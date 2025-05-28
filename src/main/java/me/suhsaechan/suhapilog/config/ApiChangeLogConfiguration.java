@@ -38,7 +38,8 @@ class ApiChangeLogConfiguration {
     return new GithubIssueService(
         issueRepository,
         properties.getGithub().getBaseUrl(),
-        null);
+        null,
+        properties);
   }
 
   /**
