@@ -1,8 +1,11 @@
 package me.suhsaechan.suhapilog.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
@@ -11,14 +14,6 @@ import me.suhsaechan.suhapilog.model.GithubIssue;
 import me.suhsaechan.suhapilog.storage.IssueRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
 /**
  * GitHub 이슈 정보를 관리하는 서비스
@@ -60,7 +55,10 @@ public class GithubIssueService {
    * GitHub에서 이슈 정보를 가져와 저장
    */
   protected GithubIssue fetchAndSaveIssue(Integer issueNumber) throws IOException {
-    String issueUrl = issueBaseUrl + issueNumber;
+
+    // URL 유연 처리
+    String issueUrl = formatIssueBaseUrl(issueBaseUrl, issueNumber);
+
     log.debug("이슈 {} 정보를 GitHub 에서 가져옵니다: {}", issueNumber, issueUrl);
 
     // GitHub 페이지에서 이슈 제목 파싱
@@ -214,7 +212,25 @@ public class GithubIssueService {
     issueRepository.saveAll(issueNumbers, updatedIssues);
   }
 
-  public String getIssueBaseUrl() {
+  // URL 구성 유연하게 처리
+  private String formatIssueBaseUrl(String issueBaseUrl, Integer issueNumber) {
+    // URL 구성을 더 유연하게 처리
+    if (issueBaseUrl.endsWith("/")) {
+      // 이미 슬래시로 끝나면 그대로 사용
+      issueBaseUrl = issueBaseUrl + issueNumber;
+    } else if (issueBaseUrl.endsWith("/issues")) {
+      // /issues로 끝나면 / 추가
+      issueBaseUrl = issueBaseUrl + "/" + issueNumber;
+    } else {
+      // 그 외의 경우 (예: github.com/username/repo)
+      if (issueBaseUrl.contains("/issues")) {
+        // issues가 포함되어 있으면 그대로 슬래시만 추가
+        issueBaseUrl = issueBaseUrl + "/" + issueNumber;
+      } else {
+        // issues가 없으면 /issues/ 추가
+        issueBaseUrl = issueBaseUrl + "/issues/" + issueNumber;
+      }
+    }
     return issueBaseUrl;
   }
 }

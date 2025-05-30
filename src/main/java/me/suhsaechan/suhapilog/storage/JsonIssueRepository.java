@@ -2,6 +2,7 @@ package me.suhsaechan.suhapilog.storage;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -104,7 +105,12 @@ public class JsonIssueRepository implements IssueRepository {
   private void saveIssues() {
     try {
       List<GithubIssue> issues = new ArrayList<>(issueCache.values());
+
+      objectMapper.registerModule(new JavaTimeModule());
+      objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
       String json = objectMapper.writeValueAsString(issues);
+
       Files.writeString(this.storageLocation.resolve(ISSUES_FILE), json);
       log.debug("{} GitHub 이슈를 저장했습니다", issues.size());
     } catch (Exception e) {
