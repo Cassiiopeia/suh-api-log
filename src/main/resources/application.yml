@@ -1,0 +1,7 @@
+spring:
+    application:
+        name: suh-api-log
+logging:
+    level:
+        me.suhsaechan.suhapilog: DEBUG
+        org.springdoc: DEBUG

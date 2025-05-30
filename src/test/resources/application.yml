@@ -1,0 +1,11 @@
+spring:
+    application:
+        name: suh-api-log
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
+
+logging:
+    level:
+        me.suhsaechan.suhapilog: DEBUG
+        org.springdoc: DEBUG
