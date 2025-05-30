@@ -19,7 +19,7 @@ dependencies {
     compileOnly 'org.springframework:spring-context'
 
     // ===== API 문서화 =====
-    compileOnly 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
 
     // ===== 핵심 의존성 =====
     implementation 'org.slf4j:slf4j-api'
@@ -37,7 +37,7 @@ dependencies {
 
     // ===== 테스트 의존성 =====
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    testImplementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
