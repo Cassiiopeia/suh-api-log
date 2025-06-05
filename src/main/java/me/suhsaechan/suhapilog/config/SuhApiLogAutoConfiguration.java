@@ -117,17 +117,25 @@ public class SuhApiLogAutoConfiguration {
     return args -> {
       log.info("API 변경 이력 정보 초기화 시작...");
       try {
-        // 모든 컨트롤러 클래스 찾기
+        log.info("API 변경 이력 정보 초기화 시작...");
+
         Map<String, Object> controllers = context.getBeansWithAnnotation(RestController.class);
         controllers.putAll(context.getBeansWithAnnotation(Controller.class));
 
-        // 클래스 배열로 변환
-        Class<?>[] controllerClasses = controllers.values().stream()
-            .map(Object::getClass)
+        // 원본 컨트롤러 클래스 수집 (CGLIB 프록시가 아닌)
+        Class<?>[] sourceClasses = controllers.values().stream()
+            .map(controller -> {
+              Class<?> clazz = controller.getClass();
+              // CGLIB 프록시라면 원본 클래스 사용
+              if (clazz.getName().contains("$$")) {
+                clazz = clazz.getSuperclass();
+              }
+              log.debug("원본 컨트롤러 클래스: {}", clazz.getName());
+              return clazz;
+            })
             .toArray(Class<?>[]::new);
 
-        // 모든 컨트롤러에서 API 변경 이력 스캔 및 GitHub 이슈 정보 가져오기
-        changelogProcessor.syncIssuesFromSource(controllerClasses);
+        changelogProcessor.syncIssuesFromSource(sourceClasses);
         log.info("API 변경 이력 정보 초기화 완료");
       } catch (Exception e) {
         log.error("API 변경 이력 초기화 중 오류 발생: {}", e.getMessage(), e);
