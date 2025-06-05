@@ -24,6 +24,7 @@ public class SwaggerIntegration {
    * 이 메서드는 리플렉션을 통해 간접적으로 호출됨 (Swagger/SpringDoc 의존성이 있을 때만)
    */
   public Object customizeOperation(Object operation, HandlerMethod handlerMethod) {
+    log.debug("SwaggerIntegration.customizeOperation 호출: {}", handlerMethod.getMethod().getName());
     try {
       // Swagger 의존성이 있는지 확인
       Class<?> operationClass = operation.getClass();
