@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableConfigurationProperties
 @ConditionalOnProperty(prefix = "suhapilog", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class SuhApiLogAutoConfiguration {
+
   private static final Logger log = LoggerFactory.getLogger(SuhApiLogAutoConfiguration.class);
 
   @Bean
@@ -60,25 +61,34 @@ public class SuhApiLogAutoConfiguration {
 
   @Bean
   public Object operationCustomizer(final ChangelogProcessor processor) {
+    log.debug("SpringDoc 통합 시도 중...");
     try {
       // SpringDoc 존재 여부 확인 - 최신 버전 경로 확인
       Class<?> customizer;
       try {
+        log.debug("SpringDoc 3.x 경로 확인: org.springdoc.core.customizers.OperationCustomizer");
         customizer = Class.forName("org.springdoc.core.customizers.OperationCustomizer");
+        log.debug("SpringDoc 3.x 버전 발견");
       } catch (ClassNotFoundException e) {
         // 최신 SpringDoc 버전 (2.x) 경로 시도
         try {
+          log.debug("SpringDoc 2.x 경로 확인: org.springdoc.api.customizers.OperationCustomizer");
           customizer = Class.forName("org.springdoc.api.customizers.OperationCustomizer");
+          log.debug("SpringDoc 2.x 버전 발견");
         } catch (ClassNotFoundException ex) {
-          log.warn("SpringDoc OperationCustomizer 클래스를 찾을 수 없습니다", ex);
+          log.warn("SpringDoc OperationCustomizer 클래스를 찾을 수 없습니다");
           return null;
         }
       }
 
+      // 로그 확인
+      log.debug("클래스로더: {}", getClass().getClassLoader());
+      log.debug("의존성 확인: {}", customizer.getName());
+
       // 런타임에 OperationCustomizer 인터페이스를 구현
       Object instance = java.lang.reflect.Proxy.newProxyInstance(
           getClass().getClassLoader(),
-          new Class<?>[] { customizer },
+          new Class<?>[]{customizer},
           (proxy, method, args) -> {
             // customize 메서드인 경우 처리
             if ("customize".equals(method.getName()) && args.length == 2) {
@@ -104,24 +114,24 @@ public class SuhApiLogAutoConfiguration {
       final ChangelogProcessor changelogProcessor,
       final ApplicationContext context) {
 
-      return args -> {
-          log.info("API 변경 이력 정보 초기화 시작...");
-          try {
-              // 모든 컨트롤러 클래스 찾기
-              Map<String, Object> controllers = context.getBeansWithAnnotation(RestController.class);
-              controllers.putAll(context.getBeansWithAnnotation(Controller.class));
+    return args -> {
+      log.info("API 변경 이력 정보 초기화 시작...");
+      try {
+        // 모든 컨트롤러 클래스 찾기
+        Map<String, Object> controllers = context.getBeansWithAnnotation(RestController.class);
+        controllers.putAll(context.getBeansWithAnnotation(Controller.class));
 
-              // 클래스 배열로 변환
-              Class<?>[] controllerClasses = controllers.values().stream()
-                  .map(Object::getClass)
-                  .toArray(Class<?>[]::new);
+        // 클래스 배열로 변환
+        Class<?>[] controllerClasses = controllers.values().stream()
+            .map(Object::getClass)
+            .toArray(Class<?>[]::new);
 
-              // 모든 컨트롤러에서 API 변경 이력 스캔 및 GitHub 이슈 정보 가져오기
-              changelogProcessor.syncIssuesFromSource(controllerClasses);
-              log.info("API 변경 이력 정보 초기화 완료");
-          } catch (Exception e) {
-              log.error("API 변경 이력 초기화 중 오류 발생: {}", e.getMessage(), e);
-          }
-      };
+        // 모든 컨트롤러에서 API 변경 이력 스캔 및 GitHub 이슈 정보 가져오기
+        changelogProcessor.syncIssuesFromSource(controllerClasses);
+        log.info("API 변경 이력 정보 초기화 완료");
+      } catch (Exception e) {
+        log.error("API 변경 이력 초기화 중 오류 발생: {}", e.getMessage(), e);
+      }
+    };
   }
 }
