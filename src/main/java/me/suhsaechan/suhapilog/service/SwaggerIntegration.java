@@ -1,8 +1,9 @@
 package me.suhsaechan.suhapilog.service;
 
-import lombok.extern.slf4j.Slf4j;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
+import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
+import me.suhsaechan.suhapilog.config.SuhApiLogger;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.web.method.HandlerMethod;
@@ -11,8 +12,8 @@ import org.springframework.web.method.HandlerMethod;
  * Swagger와의 통합을 위한 클래스
  * 이 클래스는 Swagger/SpringDoc이 존재할 때만 실제로 작동하도록 설계됨
  */
-@Slf4j
 public class SwaggerIntegration {
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
 
   private final GithubIssueService githubIssueService;
 

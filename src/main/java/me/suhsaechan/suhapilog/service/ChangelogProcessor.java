@@ -5,15 +5,15 @@ import java.util.Set;
 import java.util.TreeSet;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
+import me.suhsaechan.suhapilog.config.SuhApiLogger;
 import org.springframework.web.method.HandlerMethod;
 
 /**
  * 변경 로그 처리를 위한 핵심 로직
  */
 public class ChangelogProcessor {
-  private static final Logger log = LoggerFactory.getLogger(ChangelogProcessor.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
 
   private final GithubIssueService githubIssueService;
   private final SwaggerIntegration swaggerIntegration;

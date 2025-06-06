@@ -19,18 +19,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
+import me.suhsaechan.suhapilog.config.SuhApiLogger;
 import me.suhsaechan.suhapilog.model.GithubIssue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * GitHub 이슈 정보를 JSON 파일로 저장하고 조회하는 리포지토리
  */
 public class JsonIssueRepository implements IssueRepository {
-  private static final Logger log = LoggerFactory.getLogger(JsonIssueRepository.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
+
   private static final String ISSUES_FILE = "github-issues.json";
   private static final String HASH_FILE = "github-issues-hash.json";
 
@@ -175,7 +175,7 @@ public class JsonIssueRepository implements IssueRepository {
    */
   private String calculateHash(String input) {
     try {
-      MessageDigest md = MessageDigest.getInstance("MD5");
+      MessageDigest md = MessageDigest.getInstance("SHA-256");
       byte[] hashBytes = md.digest(input.getBytes(StandardCharsets.UTF_8));
 
       StringBuilder sb = new StringBuilder();
@@ -185,7 +185,7 @@ public class JsonIssueRepository implements IssueRepository {
       return sb.toString();
     } catch (NoSuchAlgorithmException e) {
       log.error("해시 계산에 실패했습니다", e);
-      return UUID.randomUUID().toString();
+      throw new RuntimeException("해시 계산을 위한 알고리즘을 찾을 수 없습니다", e);
     }
   }
 }

@@ -2,5 +2,5 @@ suhapilog:
   github:
     base-url: "https://github.com/Cassiiopeia/suh-api-log/issues/"
   storage:
-    path: "./test-github-issue"
+    path: "./github-issue"
   default-author: "서새찬"

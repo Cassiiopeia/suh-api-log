@@ -5,8 +5,6 @@ import me.suhsaechan.suhapilog.service.ChangelogProcessor;
 import me.suhsaechan.suhapilog.service.GithubIssueService;
 import me.suhsaechan.suhapilog.storage.IssueRepository;
 import me.suhsaechan.suhapilog.storage.JsonIssueRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -27,8 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ConditionalOnProperty(prefix = "suhapilog", name = "enabled", havingValue = "true", matchIfMissing = true)
 @AutoConfiguration
 public class SuhApiLogAutoConfiguration {
-
-  private static final Logger log = LoggerFactory.getLogger(SuhApiLogAutoConfiguration.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
 
   @Bean
   @ConfigurationProperties(prefix = "suhapilog")
@@ -96,9 +93,15 @@ public class SuhApiLogAutoConfiguration {
             if ("customize".equals(method.getName()) && args.length == 2) {
               return processor.customizeSwaggerOperation(args[0], args[1]);
             }
-            // 그 외 메서드는 기본 처리
+            // Object 클래스의 메서드는 프록시 객체에 맞게 직접 구현
             if (method.getDeclaringClass() == Object.class) {
-              return method.invoke(this, args);
+              if ("toString".equals(method.getName())) {
+                return "OperationCustomizer Proxy";
+              } else if ("equals".equals(method.getName())) {
+                return proxy == args[0];
+              } else if ("hashCode".equals(method.getName())) {
+                return System.identityHashCode(proxy);
+              }
             }
             return null;
           });
@@ -114,13 +117,22 @@ public class SuhApiLogAutoConfiguration {
   @Bean
   public ApplicationRunner apiChangelogInitializer(
       final ChangelogProcessor changelogProcessor,
-      final ApplicationContext context) {
+      final ApplicationContext context,
+      final ApiChangeLogProperties properties) {
 
     return args -> {
+
+      // 설정 유효성 검증
+      if (properties.isEnabled() && (properties.getGithub().getBaseUrl() == null || properties.getGithub().getBaseUrl()
+          .isEmpty())) {
+        throw new IllegalStateException(
+            "GitHub 이슈 기능이 활성화되었지만 baseUrl이 설정되지 않았습니다.\n" +
+                "application.yml 또는 application.properties에 다음을 추가하세요:\n" +
+                "suhapilog.github.base-url=https://github.com/YourUsername/YourRepo/issues/");
+      }
+
       log.info("API 변경 이력 정보 초기화 시작...");
       try {
-        log.info("API 변경 이력 정보 초기화 시작...");
-
         Map<String, Object> controllers = context.getBeansWithAnnotation(RestController.class);
         controllers.putAll(context.getBeansWithAnnotation(Controller.class));
 

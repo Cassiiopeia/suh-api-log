@@ -9,17 +9,17 @@ public class ApiChangeLogProperties {
   private boolean enabled = true;
   private Github github = new Github();
   private Storage storage = new Storage();
-  private String defaultAuthor = "SUHSAECHAN";
+  private String defaultAuthor = "";
 
   @Setter
   @Getter
   public static class Github {
-    private String baseUrl = "https://github.com/Cassiiopeia/suh-api-log/issues/";
+    private String baseUrl;
   }
 
   @Setter
   @Getter
   public static class Storage {
-    private String path = "github-issue";
+    private String path = "./github-issues";
   }
 }

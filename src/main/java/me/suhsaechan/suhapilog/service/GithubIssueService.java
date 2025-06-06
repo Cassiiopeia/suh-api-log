@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
 import me.suhsaechan.suhapilog.config.ApiChangeLogProperties;
+import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
+import me.suhsaechan.suhapilog.config.SuhApiLogger;
 import me.suhsaechan.suhapilog.model.GithubIssue;
 import me.suhsaechan.suhapilog.storage.IssueRepository;
 import org.jsoup.Jsoup;
@@ -24,6 +26,7 @@ import org.jsoup.nodes.Document;
 @Getter
 @RequiredArgsConstructor
 public class GithubIssueService {
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
 
   private final IssueRepository issueRepository;
   private final String issueBaseUrl;
@@ -179,7 +182,9 @@ public class GithubIssueService {
    * 문자열에서 HTML 특수문자를 이스케이프 처리
    */
   public String escapeHtml(String text) {
-    if (text == null) return "";
+    if (text == null) {
+      return "";
+    }
     return text.replace("&", "&amp;")
         .replace("<", "&lt;")
         .replace(">", "&gt;")
@@ -211,23 +216,14 @@ public class GithubIssueService {
 
   // URL 구성 유연하게 처리
   private String formatIssueBaseUrl(String issueBaseUrl, Integer issueNumber) {
-    // URL 구성을 더 유연하게 처리
-    if (issueBaseUrl.endsWith("/")) {
-      // 이미 슬래시로 끝나면 그대로 사용
-      issueBaseUrl = issueBaseUrl + issueNumber;
-    } else if (issueBaseUrl.endsWith("/issues")) {
-      // /issues로 끝나면 / 추가
-      issueBaseUrl = issueBaseUrl + "/" + issueNumber;
-    } else {
-      // 그 외의 경우 (예: github.com/username/repo)
-      if (issueBaseUrl.contains("/issues")) {
-        // issues가 포함되어 있으면 그대로 슬래시만 추가
-        issueBaseUrl = issueBaseUrl + "/" + issueNumber;
-      } else {
-        // issues가 없으면 /issues/ 추가
-        issueBaseUrl = issueBaseUrl + "/issues/" + issueNumber;
-      }
+    // 기본 URL 정규화
+    String normalizedUrl = issueBaseUrl.replaceAll("/+$", ""); // 끝의 슬래시 제거
+
+    // /issues 경로가 없으면 추가
+    if (!normalizedUrl.contains("/issues")) {
+      normalizedUrl += "/issues";
     }
-    return issueBaseUrl;
+
+    return normalizedUrl + "/" + issueNumber;
   }
 }
