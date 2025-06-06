@@ -12,6 +12,26 @@
 - **캐싱 기능**: GitHub 이슈 정보를 로컬에 캐싱하여 성능 최적화
 - **설정 커스터마이징**: 다양한 설정으로 원하는 형태로 사용 가능
 
+- 작동 다이어그램
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant ChangelogProcessor
+    participant GithubIssueService
+    participant IssueRepository
+    participant SwaggerUI
+
+    Client->>Controller: API 요청
+    Controller->>ChangelogProcessor: 메서드의 변경이력 HTML 요청
+    ChangelogProcessor->>GithubIssueService: 이슈 정보 조회/동기화
+    GithubIssueService->>IssueRepository: 캐시된 이슈 조회/저장
+    GithubIssueService->>GithubIssueService: 필요시 GitHub에서 이슈 크롤링
+    ChangelogProcessor->>SwaggerUI: 변경이력 HTML 전달
+    SwaggerUI-->>Client: 변경이력 포함 API 문서 응답
+```
+
+
 ## 설치 방법
 
 ### Gradle
