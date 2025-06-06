@@ -1,22 +1,27 @@
-suh-api-log
-suh-api-log는 Spring Boot 기반 API의 변경 이력을 쉽게 관리하고 Swagger UI에 표시할 수 있는 라이브러리입니다. 이 도구를 사용하면 개발자는 코드 내에서 API 변경 사항을 문서화하고, GitHub 이슈와 연동하여 더 자세한 변경 정보를 제공할 수 있습니다.  <img src="https://github.com/Cassiiopeia/suh-api-log/raw/main/docs/images/example-screenshot.png" alt="API "></img>
+# suh-api-log
 
-주요 기능
-쉬운 통합: Spring Boot 자동 설정으로 별도 설정 없이 사용 가능
-@ApiChangeLogs 어노테이션: API 메서드에 변경 이력을 쉽게 기록
-GitHub 이슈 통합: 변경 이력과 GitHub 이슈를 연동하여 더 자세한 컨텍스트 제공
-Swagger UI 통합: API 문서에 변경 이력 테이블 자동 표시
-캐싱 기능: GitHub 이슈 정보를 로컬에 캐싱하여 성능 최적화
-설정 커스터마이징: 다양한 설정으로 원하는 형태로 사용 가능
+**suh-api-log**는 Spring Boot 기반 API의 변경 이력을 쉽게 관리하고 Swagger UI에 표시할 수 있는 라이브러리입니다. 이 도구를 사용하면 개발자는 코드 내에서 API 변경 사항을 문서화하고, GitHub 이슈와 연동하여 더 자세한 변경 정보를 제공할 수 있습니다.
 
-설치 방법
-Gradle
-build.gradle 파일에 다음 내용을 추가합니다:
 
-```
+## 주요 기능
+
+- **쉬운 통합**: Spring Boot 자동 설정으로 별도 설정 없이 사용 가능
+- **@ApiChangeLogs 어노테이션**: API 메서드에 변경 이력을 쉽게 기록
+- **GitHub 이슈 통합**: 변경 이력과 GitHub 이슈를 연동하여 더 자세한 컨텍스트 제공
+- **Swagger UI 통합**: API 문서에 변경 이력 테이블 자동 표시
+- **캐싱 기능**: GitHub 이슈 정보를 로컬에 캐싱하여 성능 최적화
+- **설정 커스터마이징**: 다양한 설정으로 원하는 형태로 사용 가능
+
+## 설치 방법
+
+### Gradle
+
+`build.gradle` 파일에 다음 내용을 추가합니다:
+
+```groovy
 repositories {
     mavenCentral()
-    // 필요한 경우 아래 저장소 추가
+    // 중요: Suh-Nexus 저장소 필수 추가
     maven {
         url "http://suh-project.synology.me:9999/repository/maven-releases/"
         allowInsecureProtocol = true
@@ -28,9 +33,11 @@ dependencies {
 }
 ```
 
-Maven
-pom.xml 파일에 다음 내용을 추가합니다:
-```
+### Maven
+
+`pom.xml` 파일에 다음 내용을 추가합니다:
+
+```xml
 <dependencies>
     <dependency>
         <groupId>me.suhsaechan</groupId>
@@ -39,7 +46,7 @@ pom.xml 파일에 다음 내용을 추가합니다:
     </dependency>
 </dependencies>
 
-<!-- 필요한 경우 아래 저장소 추가 -->
+<!-- 중요: Suh-Nexus 저장소 필수 추가 -->
 <repositories>
     <repository>
         <id>suh-project-releases</id>
@@ -54,12 +61,19 @@ pom.xml 파일에 다음 내용을 추가합니다:
 </repositories>
 ```
 
-기본 사용법
-1. 의존성 추가 후 자동 설정
-   Spring Boot의 자동 설정 기능을 통해 별도의 설정 없이도 라이브러리가 자동으로 초기화됩니다.
-2. API 메서드에 변경 이력 어노테이션 추가
+## 빠른 시작 가이드
 
-```text
+### 1. 의존성 추가 및 저장소 설정
+
+위 Gradle 또는 Maven 설정을 프로젝트에 추가합니다. **주의: Suh-Nexus 저장소 설정은 필수입니다.**
+
+### 2. 자동 설정 적용
+
+Spring Boot의 자동 설정 기능을 통해 별도의 설정 없이도 라이브러리가 자동으로 초기화됩니다.
+
+### 3. API 메서드에 변경 이력 어노테이션 추가
+
+```java
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,9 +103,15 @@ public class UserController {
 }
 ```
 
-3. Swagger UI에서 변경 이력 확인
-   SpringDoc 라이브러리가 포함되어 있다면, API 문서에 자동으로 변경 이력 테이블이 표시됩니다. 
-```
+### 4. Swagger UI에서 변경 이력 확인
+
+SpringDoc 라이브러리가 포함되어 있다면, API 문서에 자동으로 변경 이력 테이블이 표시됩니다.
+
+## 설정 옵션
+
+`application.yml` 또는 `application.properties`에서 다음과 같이 설정할 수 있습니다:
+
+```yaml
 suhapilog:
   # 기능 활성화 여부
   enabled: true
@@ -108,12 +128,13 @@ suhapilog:
   default-author: "SUHSAECHAN"
 ```
 
-상세 사용법
-여러 변경 이력 기록하기
+## 상세 사용법
+
+### 여러 변경 이력 기록하기
+
 하나의 API에 여러 변경 이력을 기록할 수 있습니다. 가장 최신 변경사항이 목록의 맨 위에 오도록 배치하는 것을 권장합니다.
 
-```text
-
+```java
 @ApiChangeLogs({
     @ApiChangeLog(
         date = "2024-07-10",
@@ -135,10 +156,12 @@ suhapilog:
     )
 })
 ```
-GitHub 이슈 없이 사용하기
+
+### GitHub 이슈 없이 사용하기
+
 GitHub 이슈 번호를 지정하지 않고도 사용할 수 있습니다:
 
-```text
+```java
 @ApiChangeLogs({
     @ApiChangeLog(
         date = "2024-07-10",
@@ -148,10 +171,12 @@ GitHub 이슈 번호를 지정하지 않고도 사용할 수 있습니다:
     )
 })
 ```
-인터페이스에 어노테이션 추가
+
+### 인터페이스에 어노테이션 추가
+
 구현 클래스가 아닌 인터페이스에 어노테이션을 추가할 수 있습니다:
 
-```text
+```java
 public interface UserService {
     @ApiChangeLogs({
         @ApiChangeLog(
@@ -174,23 +199,24 @@ public class UserController implements UserService {
 }
 ```
 
-맞춤 설정 예제
-저장소 위치 변경
-기본 작성자 설정
-GitHub 이슈 URL 변경
-기능 비활성화
-```text
+## 맞춤 설정 예제
+
+### 설정 파일 통한 커스터마이징
+
+```yaml
 suhapilog:
-  enabled: false
+  enabled: false                             # 기능 비활성화
   storage:
-    path: "/var/data/api-changelog"
-  default-author: "개발팀"
+    path: "/var/data/api-changelog"          # 저장소 위치 변경
+  default-author: "개발팀"                    # 기본 작성자 설정
   github:
-    base-url: "https://github.com/my-organization/my-project/issues/"
+    base-url: "https://github.com/my-organization/my-project/issues/"  # GitHub 이슈 URL 변경
 ```
 
-자체 설정 클래스 만들기
+### 자체 설정 클래스 만들기
+
 필요한 경우 자체 설정 클래스를 작성할 수 있습니다:
+
 ```java
 @Configuration
 @EnableConfigurationProperties
@@ -208,8 +234,9 @@ public class MyApiChangeLogConfig {
 }
 ```
 
-프로젝트 구조
-```text
+## 프로젝트 구조
+
+```
 - src/main/java
   - me.suhsaechan.suhapilog
     - annotation
@@ -229,31 +256,39 @@ public class MyApiChangeLogConfig {
       - JsonIssueRepository.java   # JSON 파일 기반 구현
 ```
 
-버전 정보
-현재 최신 버전: v1.0.0  주요 변경 사항:
-초기 릴리스
-GitHub 이슈 연동 기능
-Swagger UI 통합
-Spring Boot 3.x 지원
-기술 요구사항
-Java 17 이상
-Spring Boot 3.x
-(선택) SpringDoc OpenAPI UI 2.x 이상 (Swagger UI 통합용)
+## 버전 정보
 
+- **현재 최신 버전**: v1.0.0
+- **주요 변경 사항**:
+   - 초기 릴리스
+   - GitHub 이슈 연동 기능
+   - Swagger UI 통합
+   - Spring Boot 3.x 지원
 
-기여하기
-버그 신고, 기능 요청, 코드 기여는 GitHub 저장소의 이슈 트래커를 통해 가능합니다: https://github.com/Cassiiopeia/suh-api-log/issues  
-FAQ
-Q: Spring Boot 2.x에서도 사용할 수 있나요?
-A: 현재 버전은 Spring Boot 3.x에 최적화되어 있습니다. Spring Boot 2.x 지원은 향후 계획 중입니다.  
-Q: GitHub 이외의 이슈 트래커를 지원하나요?
-A: 현재는 GitHub만 지원합니다. 다른 이슈 트래커 지원은 향후 검토할 예정입니다.  
-Q: 캐시된 이슈 정보는 어디에 저장되나요?
+## 기술 요구사항
+
+- Java 17 이상
+- Spring Boot 3.x
+- (선택) SpringDoc OpenAPI UI 2.x 이상 (Swagger UI 통합용)
+
+## 기여하기
+
+버그 신고, 기능 요청, 코드 기여는 GitHub 저장소의 이슈 트래커를 통해 가능합니다:  
+[https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
+
+## FAQ
+
+### Q: Spring Boot 2.x에서도 사용할 수 있나요?
+A: 현재 버전은 Spring Boot 3.x에 최적화되어 있습니다. Spring Boot 2.x 지원은 향후 계획 중입니다.
+
+### Q: GitHub 이외의 이슈 트래커를 지원하나요?
+A: 현재는 GitHub만 지원합니다. 다른 이슈 트래커 지원은 향후 검토할 예정입니다.
+
+### Q: 캐시된 이슈 정보는 어디에 저장되나요?
 A: 기본적으로 프로젝트 루트 디렉토리의 github-issue 폴더에 JSON 형식으로 저장됩니다. suhapilog.storage.path 설정으로 변경할 수 있습니다.
 
+## 문의 및 지원
 
-문의 및 지원
 더 자세한 정보나 지원이 필요하면 다음 채널로 문의해주세요:
-GitHub 이슈: https://github.com/Cassiiopeia/suh-api-log/issues
-이메일: chan4760@gmail.com
-
+- GitHub 이슈: [https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
+- 이메일: chan4760@gmail.com
