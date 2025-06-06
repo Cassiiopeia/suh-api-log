@@ -256,15 +256,6 @@ public class MyApiChangeLogConfig {
       - JsonIssueRepository.java   # JSON 파일 기반 구현
 ```
 
-## 버전 정보
-
-- **현재 최신 버전**: v1.0.0
-- **주요 변경 사항**:
-   - 초기 릴리스
-   - GitHub 이슈 연동 기능
-   - Swagger UI 통합
-   - Spring Boot 3.x 지원
-
 ## 기술 요구사항
 
 - Java 17 이상
@@ -292,3 +283,22 @@ A: 기본적으로 프로젝트 루트 디렉토리의 github-issue 폴더에 JS
 더 자세한 정보나 지원이 필요하면 다음 채널로 문의해주세요:
 - GitHub 이슈: [https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
 - 이메일: chan4760@gmail.com
+
+## 버전 정보
+
+- **현재 최신 버전**: v1.0.2
+- **주요 변경 사항**:
+
+  ### v1.0.2
+  - GitHub 이슈 URL 생성 방식 개선
+  - 이슈 URL 형식 처리 로직 향상
+
+  ### v1.0.1
+  - 버그 수정 및 안정성 개선
+  - 문서 업데이트
+
+  ### v1.0.0
+  - 초기 릴리스
+  - GitHub 이슈 연동 기능
+  - Swagger UI 통합
+  - Spring Boot 3.x 지원
