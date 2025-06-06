@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'me.suhsaechan'
-version = project.findProperty('version') ?: '0.0.4'
+version = project.findProperty('version') ?: '1.0.0'
 sourceCompatibility = '17'
 
 repositories {
@@ -23,7 +23,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-autoconfigure'
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
 
-    // 핵심 의존성
     implementation 'org.slf4j:slf4j-api'
 
     implementation 'com.fasterxml.jackson.core:jackson-databind'
