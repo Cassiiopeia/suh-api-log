@@ -16,29 +16,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
-
-      - name: Setup Gradle # 캐시 기능 강화
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: false
-          gradle-version: wrapper
-
-      - name: Setup Gradle Cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            .gradle
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Create gradle.properties from secret
         run: |
-          echo -e "${{ secrets.GRADLE_PROPERTIES }}" > gradle.properties
+          echo "${{ secrets.GRADLE_PROPERTIES }}" > gradle.properties
+          chmod 600 gradle.properties  # 보안 강화를 위해 파일 권한 설정
 
       - name: Show created file (debug)
         run: cat gradle.properties | grep -v password
@@ -47,5 +29,9 @@ jobs:
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}    # 태그명 추출
           VERSION=${TAG_NAME#v}                # 접두사 제거
+                    if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Invalid version format. Expected x.y.z, got $VERSION"
+            exit 1
+          fi
           echo "Publishing version $VERSION"   # 버전 확인
           ./gradlew publish -Pversion=$VERSION --parallel --build-cache # Nexus 배포
