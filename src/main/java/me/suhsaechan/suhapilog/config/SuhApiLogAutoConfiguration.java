@@ -8,6 +8,7 @@ import me.suhsaechan.suhapilog.storage.JsonIssueRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnProperty(prefix = "suhapilog", name = "enabled", havingValue = "true", matchIfMissing = true)
+@AutoConfiguration
 public class SuhApiLogAutoConfiguration {
 
   private static final Logger log = LoggerFactory.getLogger(SuhApiLogAutoConfiguration.class);
