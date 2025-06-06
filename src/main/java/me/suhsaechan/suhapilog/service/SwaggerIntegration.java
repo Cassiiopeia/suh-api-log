@@ -87,10 +87,11 @@ public class SwaggerIntegration {
       String issueTitleCell = "";
 
       if (apiChangeLog.issueNumber() > 0) {
-        issueNumberCell = String.format("<a href=\"%s%d\" target=\"_blank\">#%d</a>",
+        String issueUrl = githubIssueService.formatIssueBaseUrl(
             githubIssueService.getIssueBaseUrl(),
-            apiChangeLog.issueNumber(),
             apiChangeLog.issueNumber());
+        issueNumberCell = String.format("<a href=\"%s\" target=\"_blank\">#%d</a>",
+            issueUrl, apiChangeLog.issueNumber());
 
         try {
           issueTitleCell = githubIssueService.getOrFetchIssue(apiChangeLog.issueNumber()).getCleanTitle();

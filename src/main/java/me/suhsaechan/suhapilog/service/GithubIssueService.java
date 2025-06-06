@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
 import me.suhsaechan.suhapilog.config.ApiChangeLogProperties;
@@ -22,7 +21,6 @@ import org.jsoup.nodes.Document;
 /**
  * GitHub 이슈 정보를 관리하는 서비스
  */
-@Slf4j
 @Getter
 @RequiredArgsConstructor
 public class GithubIssueService {
@@ -150,8 +148,9 @@ public class GithubIssueService {
       }
 
       if (apiChangeLog.issueNumber() > 0) {
-        issueNumberCell = String.format("<a href=\"%s%d\" target=\"_blank\">#%d</a>",
-            issueBaseUrl, apiChangeLog.issueNumber(), apiChangeLog.issueNumber());
+        String issueUrl = formatIssueBaseUrl(issueBaseUrl, apiChangeLog.issueNumber());
+        issueNumberCell = String.format("<a href=\"%s\" target=\"_blank\">#%d</a>",
+            issueUrl, apiChangeLog.issueNumber());
 
         try {
           GithubIssue issue = getOrFetchIssue(apiChangeLog.issueNumber());
@@ -215,7 +214,7 @@ public class GithubIssueService {
   }
 
   // URL 구성 유연하게 처리
-  private String formatIssueBaseUrl(String issueBaseUrl, Integer issueNumber) {
+  public String formatIssueBaseUrl(String issueBaseUrl, Integer issueNumber) {
     // 기본 URL 정규화
     String normalizedUrl = issueBaseUrl.replaceAll("/+$", ""); // 끝의 슬래시 제거
 
