@@ -12,7 +12,7 @@
 - **캐싱 기능**: GitHub 이슈 정보를 로컬에 캐싱하여 성능 최적화
 - **설정 커스터마이징**: 다양한 설정으로 원하는 형태로 사용 가능
 
-- 작동 다이어그램
+## 작동 FLOW
 ```mermaid
 sequenceDiagram
     participant Client
