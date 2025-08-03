@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Configuration
 @EnableConfigurationProperties
-@ConditionalOnProperty(prefix = "suhapilog", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "suhapilog", name = "enabled", havingValue = "true", matchIfMissing = false)
 @AutoConfiguration
 public class SuhApiLogAutoConfiguration {
   private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);

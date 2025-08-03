@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
 import me.suhsaechan.suhapilog.config.ApiChangeLogProperties;
@@ -21,8 +20,6 @@ import org.jsoup.nodes.Document;
 /**
  * GitHub 이슈 정보를 관리하는 서비스
  */
-@Getter
-@RequiredArgsConstructor
 public class GithubIssueService {
   private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
 
@@ -30,6 +27,29 @@ public class GithubIssueService {
   private final String issueBaseUrl;
   private final String scanPackage;
   private final ApiChangeLogProperties properties;
+
+  public GithubIssueService(IssueRepository issueRepository, String issueBaseUrl, String scanPackage, ApiChangeLogProperties properties) {
+    this.issueRepository = issueRepository;
+    this.issueBaseUrl = issueBaseUrl;
+    this.scanPackage = scanPackage;
+    this.properties = properties;
+  }
+
+  public IssueRepository getIssueRepository() {
+    return issueRepository;
+  }
+
+  public String getIssueBaseUrl() {
+    return issueBaseUrl;
+  }
+
+  public String getScanPackage() {
+    return scanPackage;
+  }
+
+  public ApiChangeLogProperties getProperties() {
+    return properties;
+  }
 
   /**
    * 이슈 번호에 해당하는 정보 조회 (캐시에 없으면 GitHub에서 가져옴)
