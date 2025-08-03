@@ -1,7 +1,13 @@
 spring:
     application:
         name: suh-api-log
+
+# suh-api-log는 기본적으로 비활성화됨
+# 사용하려면 suhapilog.enabled: true로 설정하세요
+suhapilog:
+  enabled: false
+
 logging:
     level:
-        me.suhsaechan.suhapilog: DEBUG
-        org.springdoc: DEBUG
+        me.suhsaechan.suhapilog: INFO
+        org.springdoc: INFO

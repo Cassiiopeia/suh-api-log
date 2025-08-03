@@ -2,6 +2,7 @@
 
 **suh-api-log**는 Spring Boot 기반 API의 변경 이력을 쉽게 관리하고 Swagger UI에 표시할 수 있는 라이브러리입니다. 이 도구를 사용하면 개발자는 코드 내에서 API 변경 사항을 문서화하고, GitHub 이슈와 연동하여 더 자세한 변경 정보를 제공할 수 있습니다.
 
+## **현재 최신 버전**: 1.0.4
 
 ## 주요 기능
 
@@ -29,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'me.suhsaechan:suh-api-log:1.0.0'
+    implementation 'me.suhsaechan:suh-api-log:X.X.X' // 최신 버전으로 설정
 }
 ```
 
@@ -42,7 +43,7 @@ dependencies {
     <dependency>
         <groupId>me.suhsaechan</groupId>
         <artifactId>suh-api-log</artifactId>
-        <version>1.0.0</version>
+        <version>X.X.X</version> <!-- 최신 버전으로 설정 -->
     </dependency>
 </dependencies>
 
@@ -283,22 +284,3 @@ A: 기본적으로 프로젝트 루트 디렉토리의 github-issue 폴더에 JS
 더 자세한 정보나 지원이 필요하면 다음 채널로 문의해주세요:
 - GitHub 이슈: [https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
 - 이메일: chan4760@gmail.com
-
-## 버전 정보
-
-- **현재 최신 버전**: v1.0.2
-- **주요 변경 사항**:
-
-  ### v1.0.2
-  - GitHub 이슈 URL 생성 방식 개선
-  - 이슈 URL 형식 처리 로직 향상
-
-  ### v1.0.1
-  - 버그 수정 및 안정성 개선
-  - 문서 업데이트
-
-  ### v1.0.0
-  - 초기 릴리스
-  - GitHub 이슈 연동 기능
-  - Swagger UI 통합
-  - Spring Boot 3.x 지원
