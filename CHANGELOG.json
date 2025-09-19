@@ -1,11 +1,52 @@
 {
   "metadata": {
-    "lastUpdated": "2025-09-19T01:38:10Z",
-    "currentVersion": "1.1.4",
+    "lastUpdated": "2025-09-19T11:51:40Z",
+    "currentVersion": "1.1.5",
     "projectType": "basic",
-    "totalReleases": 1
+    "totalReleases": 2
   },
   "releases": [
+    {
+      "version": "1.1.5",
+      "project_type": "basic",
+      "date": "2025-09-19",
+      "pr_number": 11,
+      "raw_summary": "Summary by CodeRabbit\n\nNew Features\n\n기본 설정 없이 자동 활성화(Zero-config)로 사용 시작 가능\n\n\nDocumentation\n\n리브랜딩 및 README 전면 개편: 핵심 특징, 빠른 시작, 고급 설정, FAQ/라이선스 추가\n설치 가이드 업데이트(새 Nexus 저장소, 최신 버전 예시)\n\n\nRefactor\n\n로그 출력 간소화로 실행 시 불필요한 로그 감소\n\n\nTests\n\n테스트 환경에서 기능 기본 활성화\n\n\nChores\n\n버전 업데이트: 1.1.5\n기본 설정 샘플(application.yml) 정리 및 기본 활성화로 변경",
+      "parsed_changes": {
+        "new_features": {
+          "title": "New Features",
+          "items": [
+            "기본 설정 없이 자동 활성화(Zero-config)로 사용 시작 가능"
+          ]
+        },
+        "documentation": {
+          "title": "Documentation",
+          "items": [
+            "리브랜딩 및 README 전면 개편: 핵심 특징, 빠른 시작, 고급 설정, FAQ/라이선스 추가",
+            "설치 가이드 업데이트(새 Nexus 저장소, 최신 버전 예시)"
+          ]
+        },
+        "refactor": {
+          "title": "Refactor",
+          "items": [
+            "로그 출력 간소화로 실행 시 불필요한 로그 감소"
+          ]
+        },
+        "tests": {
+          "title": "Tests",
+          "items": [
+            "테스트 환경에서 기능 기본 활성화"
+          ]
+        },
+        "chores": {
+          "title": "Chores",
+          "items": [
+            "버전 업데이트: 1.1.5",
+            "기본 설정 샘플(application.yml) 정리 및 기본 활성화로 변경"
+          ]
+        }
+      }
+    },
     {
       "version": "1.1.4",
       "project_type": "basic",

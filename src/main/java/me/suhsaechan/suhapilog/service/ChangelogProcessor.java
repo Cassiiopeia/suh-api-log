@@ -5,15 +5,14 @@ import java.util.Set;
 import java.util.TreeSet;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
-import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
-import me.suhsaechan.suhapilog.config.SuhApiLogger;
+import me.suhsaechan.suhapilog.util.SuhApiLogger;
 import org.springframework.web.method.HandlerMethod;
 
 /**
  * 변경 로그 처리를 위한 핵심 로직
  */
 public class ChangelogProcessor {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(ChangelogProcessor.class);
 
   private final GithubIssueService githubIssueService;
   private final SwaggerIntegration swaggerIntegration;
@@ -72,8 +71,7 @@ public void syncIssuesFromSource(Class<?>[] sources) {
               Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
               if (ifaceMethod.isAnnotationPresent(ApiChangeLogs.class)) {
                 apiChangeLogs = ifaceMethod.getAnnotation(ApiChangeLogs.class);
-                log.debug("인터페이스 {} 메서드 {}에서 @ApiChangeLogs 발견",
-                         iface.getSimpleName(), method.getName());
+                log.debug("인터페이스 {} 메서드 {}에서 @ApiChangeLogs 발견", iface.getSimpleName(), method.getName());
                 break;
               }
             } catch (NoSuchMethodException e) {
