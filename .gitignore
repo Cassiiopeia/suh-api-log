@@ -40,3 +40,5 @@ out/
 ./gradle.properties
 /gradle.properties
 /github-issue/
+/test-github-issue/github-issues.json
+/test-github-issue/github-issues-hash.json
