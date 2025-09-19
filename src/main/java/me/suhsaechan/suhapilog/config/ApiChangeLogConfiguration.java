@@ -4,13 +4,14 @@ import me.suhsaechan.suhapilog.service.ChangelogProcessor;
 import me.suhsaechan.suhapilog.service.GithubIssueService;
 import me.suhsaechan.suhapilog.storage.IssueRepository;
 import me.suhsaechan.suhapilog.storage.JsonIssueRepository;
+import me.suhsaechan.suhapilog.util.SuhApiLogger;
 
 /**
  * API 변경 이력 모듈의 설정 클래스
  * 사용자는 이 클래스를 상속하여 자신의 @Configuration 클래스를 만들 수 있음
  */
 class ApiChangeLogConfiguration {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(ApiChangeLogConfiguration.class);
 
   /**
    * 기본 속성 생성 (기본값 사용)

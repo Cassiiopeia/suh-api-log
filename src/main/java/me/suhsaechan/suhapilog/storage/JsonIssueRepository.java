@@ -21,15 +21,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
-import me.suhsaechan.suhapilog.config.SuhApiLogger;
 import me.suhsaechan.suhapilog.model.GithubIssue;
+import me.suhsaechan.suhapilog.util.SuhApiLogger;
 
 /**
  * GitHub 이슈 정보를 JSON 파일로 저장하고 조회하는 리포지토리
  */
 public class JsonIssueRepository implements IssueRepository {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(JsonIssueRepository.class);
 
   private static final String ISSUES_FILE = "github-issues.json";
   private static final String HASH_FILE = "github-issues-hash.json";
@@ -75,7 +74,7 @@ public class JsonIssueRepository implements IssueRepository {
         issues.forEach(issue -> issueCache.put(issue.getIssueNumber(), issue));
         log.debug("{} GitHub 이슈를 로드했습니다", issues.size());
       } catch (IOException e) {
-        log.error("GitHub 이슈를 로드하는 데 실패했습니다", e);
+        log.error("GitHub 이슈를 로드하는 데 실패했습니다: {}", e.getMessage());
       }
     }
   }
@@ -94,7 +93,7 @@ public class JsonIssueRepository implements IssueRepository {
         this.currentHash = hashData.getOrDefault("hash", "");
         log.debug("현재 해시 값: {}", this.currentHash);
       } catch (IOException e) {
-        log.error("해시 데이터를 로드하는 데 실패했습니다", e);
+        log.error("해시 데이터를 로드하는 데 실패했습니다: {}", e.getMessage());
       }
     }
   }
@@ -114,7 +113,7 @@ public class JsonIssueRepository implements IssueRepository {
       Files.writeString(this.storageLocation.resolve(ISSUES_FILE), json);
       log.debug("{} GitHub 이슈를 저장했습니다", issues.size());
     } catch (Exception e) {
-      log.error("GitHub 이슈를 저장하는 데 실패했습니다", e);
+      log.error("GitHub 이슈를 저장하는 데 실패했습니다: {}", e.getMessage());
     }
   }
 
@@ -132,7 +131,7 @@ public class JsonIssueRepository implements IssueRepository {
       this.currentHash = hash;
       log.debug("새로운 해시 값 저장: {}", hash);
     } catch (Exception e) {
-      log.error("해시 값을 저장하는 데 실패했습니다", e);
+      log.error("해시 값을 저장하는 데 실패했습니다: {}", e.getMessage());
     }
   }
 
@@ -184,7 +183,7 @@ public class JsonIssueRepository implements IssueRepository {
       }
       return sb.toString();
     } catch (NoSuchAlgorithmException e) {
-      log.error("해시 계산에 실패했습니다", e);
+      log.error("해시 계산에 실패했습니다: {}", e.getMessage());
       throw new RuntimeException("해시 계산을 위한 알고리즘을 찾을 수 없습니다", e);
     }
   }

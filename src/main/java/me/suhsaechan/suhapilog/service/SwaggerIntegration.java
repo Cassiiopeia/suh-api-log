@@ -2,8 +2,7 @@ package me.suhsaechan.suhapilog.service;
 
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
-import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
-import me.suhsaechan.suhapilog.config.SuhApiLogger;
+import me.suhsaechan.suhapilog.util.SuhApiLogger;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.web.method.HandlerMethod;
@@ -13,7 +12,7 @@ import org.springframework.web.method.HandlerMethod;
  * 이 클래스는 Swagger/SpringDoc이 존재할 때만 실제로 작동하도록 설계됨
  */
 public class SwaggerIntegration {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(SwaggerIntegration.class);
 
   private final GithubIssueService githubIssueService;
 
@@ -54,7 +53,7 @@ public class SwaggerIntegration {
 
       return operation;
     } catch (Exception e) {
-      log.error("Swagger 통합 중 오류 발생: {}", e.getMessage(), e);
+      log.error("Swagger 통합 중 오류 발생: {}", e.getMessage());
       return operation;
     }
   }

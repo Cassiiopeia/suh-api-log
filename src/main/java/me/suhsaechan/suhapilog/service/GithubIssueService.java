@@ -10,8 +10,7 @@ import java.util.Set;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
 import me.suhsaechan.suhapilog.config.ApiChangeLogProperties;
-import me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration;
-import me.suhsaechan.suhapilog.config.SuhApiLogger;
+import me.suhsaechan.suhapilog.util.SuhApiLogger;
 import me.suhsaechan.suhapilog.model.GithubIssue;
 import me.suhsaechan.suhapilog.storage.IssueRepository;
 import org.jsoup.Jsoup;
@@ -21,7 +20,7 @@ import org.jsoup.nodes.Document;
  * GitHub 이슈 정보를 관리하는 서비스
  */
 public class GithubIssueService {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
+  private static final SuhApiLogger log = SuhApiLogger.getLogger(GithubIssueService.class);
 
   private final IssueRepository issueRepository;
   private final String issueBaseUrl;
@@ -176,7 +175,7 @@ public class GithubIssueService {
           GithubIssue issue = getOrFetchIssue(apiChangeLog.issueNumber());
           issueTitleCell = escapeHtml(issue.getCleanTitle());
         } catch (Exception e) {
-          log.error("이슈 정보를 가져오는 데 실패했습니다: " + e.getMessage());
+          log.error("이슈 정보를 가져오는 데 실패했습니다: {}", e.getMessage());
           description = "이슈 정보 로드 실패: " + e.getMessage();
           issueTitleCell = "ERROR";
         }
