@@ -1,7 +1,7 @@
 # 이 파일은 라이브러리 테스트용입니다
 # 실제 프로젝트에서는 사용하지 않습니다
 suhapilog:
-  enabled: false
+  enabled: true
   github:
     base-url: "https://github.com/Cassiiopeia/suh-api-log/issues/"
   storage:

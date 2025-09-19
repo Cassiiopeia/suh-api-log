@@ -1,7 +1,7 @@
-# suh-api-log는 기본적으로 비활성화됨
-# 사용하려면 suhapilog.enabled: true로 설정하세요
+# suh-api-log는 기본적으로 활성화됨
+# 비활성화하려면 suhapilog.enabled: false로 설정하세요
 suhapilog:
-  enabled: false
+  enabled: true
 
 logging:
     level:

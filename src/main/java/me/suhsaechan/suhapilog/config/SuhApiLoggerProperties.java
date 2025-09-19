@@ -75,10 +75,10 @@ public class SuhApiLoggerProperties {
      */
     public static class HeaderConfig {
         /**
-         * 헤더 출력 활성화 여부 (기본값: false)
+         * 헤더 출력 활성화 여부 (기본값: true)
          * false로 설정하면 헤더 정보가 로그에 출력되지 않음
          */
-        private boolean enabled = false;
+        private boolean enabled = true;
 
         public boolean isEnabled() {
             return enabled;
