@@ -139,30 +139,53 @@ public class SuhApiLogger {
      * SLF4J 스타일 메시지 포맷팅 ({} 플레이스홀더 지원)
      */
     private String formatMessage(String message, Object... args) {
+        final String msg = String.valueOf(message); // null -> "null"
         if (args == null || args.length == 0) {
-            return message;
+            return msg;
         }
 
         StringBuilder result = new StringBuilder();
         int argIndex = 0;
         int i = 0;
 
-        while (i < message.length()) {
-            if (i < message.length() - 1 && message.charAt(i) == '{' && message.charAt(i + 1) == '}') {
+        while (i < msg.length()) {
+            // 이스케이프된 플레이스홀더 처리: \{}
+            if (i <= msg.length() - 3 && msg.charAt(i) == '\\' && msg.charAt(i + 1) == '{' && msg.charAt(i + 2) == '}') {
+                result.append("{}");
+                i += 3;
+                continue;
+            }
+            if (i <= msg.length() - 2 && msg.charAt(i) == '{' && msg.charAt(i + 1) == '}') {
                 // {} 플레이스홀더 발견
                 if (argIndex < args.length) {
-                    result.append(String.valueOf(args[argIndex]));
+                    result.append(formatArg(args[argIndex]));
                     argIndex++;
                 } else {
                     result.append("{}"); // 인자가 부족하면 그대로 유지
                 }
                 i += 2; // {} 건너뛰기
             } else {
-                result.append(message.charAt(i));
+                result.append(msg.charAt(i));
                 i++;
             }
         }
 
         return result.toString();
+    }
+
+    private static String formatArg(Object arg) {
+        if (arg == null) return "null";
+        if (arg.getClass().isArray()) {
+            if (arg instanceof Object[]) return java.util.Arrays.deepToString((Object[]) arg);
+            if (arg instanceof int[]) return java.util.Arrays.toString((int[]) arg);
+            if (arg instanceof long[]) return java.util.Arrays.toString((long[]) arg);
+            if (arg instanceof double[]) return java.util.Arrays.toString((double[]) arg);
+            if (arg instanceof float[]) return java.util.Arrays.toString((float[]) arg);
+            if (arg instanceof boolean[]) return java.util.Arrays.toString((boolean[]) arg);
+            if (arg instanceof char[]) return java.util.Arrays.toString((char[]) arg);
+            if (arg instanceof byte[]) return java.util.Arrays.toString((byte[]) arg);
+            if (arg instanceof short[]) return java.util.Arrays.toString((short[]) arg);
+        }
+        return String.valueOf(arg);
     }
 }
