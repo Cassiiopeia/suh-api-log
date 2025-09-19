@@ -5,8 +5,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -192,20 +194,31 @@ public class SuhApiLogger {
 	
 	/**
 	 * 입력스트림의 내용을 읽어 로그로 출력
+	 * 주의: 이 메서드는 스트림을 끝까지 읽어 스트림 위치를 변경합니다.
+	 * 스트림을 닫지 않으므로 호출자가 리소스 관리를 해야 합니다.
+	 * 
+	 * @param stream 읽을 입력 스트림 (null이면 경고 로그 출력)
 	 */
 	public static void logStream(InputStream stream) {
+		if (stream == null) {
+			logger.log(Level.WARNING, "입력 스트림이 null입니다");
+			return;
+		}
+		
 		try {
 			StringBuilder sb = new StringBuilder();
 			byte[] buffer = new byte[1024];
 			int bytesRead;
 			
 			while ((bytesRead = stream.read(buffer)) != -1) {
-				sb.append(new String(buffer, 0, bytesRead));
+				sb.append(new String(buffer, 0, bytesRead, StandardCharsets.UTF_8));
 			}
 			
 			logger.log(Level.INFO, sb.toString());
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, "스트림 로깅 실패: " + e.getMessage(), e);
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "스트림 로깅 실패", e);
+			logger.log(Level.SEVERE, "스트림 로깅 중 예상치 못한 오류", e);
 		}
 	}
 

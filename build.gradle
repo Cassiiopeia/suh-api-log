@@ -35,14 +35,11 @@ dependencies {
     implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
-    implementation('org.springframework.boot:spring-boot-autoconfigure') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
 
-    // Jackson 의존성 명시적 추가
-    api 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
-    api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
+    // Jackson 의존성
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     implementation 'org.jsoup:jsoup:1.18.1'
 
