@@ -1,159 +1,182 @@
-# suh-api-log
+# suh-api-log ⚡
 
-**suh-api-log**는 Spring Boot 기반 API의 변경 이력을 쉽게 관리하고 Swagger UI에 표시할 수 있는 라이브러리입니다. 이 도구를 사용하면 개발자는 코드 내에서 API 변경 사항을 문서화하고, GitHub 이슈와 연동하여 더 자세한 변경 정보를 제공할 수 있습니다.
+**suh-api-log**는 Spring Boot API 개발을 위한 **API 변경 이력 문서화 라이브러리**입니다. 코드 레벨에서 API 변경사항을 추적하고 GitHub 이슈와 연동하여 Swagger UI에 자동으로 문서화해주는 전문 도구입니다.
 
 <!-- 수정하지마세요 자동으로 동기화 됩니다 -->
 ## 최신 버전 : v1.1.4 (2025-09-19)
 
 [전체 버전 기록 보기](CHANGELOG.md)
 
-## 주요 기능
+## ✨ 핵심 특징
 
-- **쉬운 통합**: Spring Boot 자동 설정으로 별도 설정 없이 사용 가능
-- **@ApiChangeLogs 어노테이션**: API 메서드에 변경 이력을 쉽게 기록
-- **GitHub 이슈 통합**: 변경 이력과 GitHub 이슈를 연동하여 더 자세한 컨텍스트 제공
-- **Swagger UI 통합**: API 문서에 변경 이력 테이블 자동 표시
-- **캐싱 기능**: GitHub 이슈 정보를 로컬에 캐싱하여 성능 최적화
-- **설정 커스터마이징**: 다양한 설정으로 원하는 형태로 사용 가능
+### 🚀 제로 설정 시작
+- **한 줄 의존성 추가만으로 즉시 사용 가능**
+- Spring Boot 자동 설정으로 별도 구성 불필요
+- import하는 순간 자동으로 활성화
 
-## 설치 방법
+### 📝 API 변경 이력 문서화 시스템
+**주요 기능** (`@ApiChangeLogs`)
+- 코드 레벨에서 API 변경사항 추적
+- GitHub 이슈 연동으로 상세 컨텍스트 제공
+- Swagger UI 자동 통합
+- 인터페이스 기반 어노테이션 지원
 
-### Gradle
+### 🎨 순수 POJO 아키텍처
+**의존성 독립성**
+- 외부 로깅 라이브러리 의존성 제거
+- Java Util Logging 기반 커스텀 래퍼
+- 기존 프로젝트 로깅 설정에 영향 없음
 
-`build.gradle` 파일에 다음 내용을 추가합니다:
+### ⚡ 스마트 기능
+- **GitHub 이슈 자동 캐싱**: 네트워크 호출 최소화
+- **독립 로거**: 기존 로깅 설정과 완전 분리
+- **순수 POJO 설계**: 외부 의존성 최소화
+- **성능 최적화**: 효율적인 메모리 사용
 
+---
+
+## 🚀 빠른 시작
+
+### 1. 의존성 추가
+
+#### Gradle
 ```groovy
 repositories {
     mavenCentral()
-    // 중요: Suh-Nexus 저장소 필수 추가
+    // 중요: Suh-Nexus 저장소 필수
     maven {
-        url "http://suh-project.synology.me:9999/repository/maven-releases/"
-        allowInsecureProtocol = true
+        url "https://nexus.suhsaechan.me/repository/maven-releases/"
     }
 }
 
 dependencies {
-    implementation 'me.suhsaechan:suh-api-log:X.X.X' // 최신 버전으로 설정
+    implementation 'me.suhsaechan:suh-api-log:1.1.4'
 }
 ```
 
-### Maven
-
-`pom.xml` 파일에 다음 내용을 추가합니다:
-
+#### Maven
 ```xml
 <dependencies>
     <dependency>
         <groupId>me.suhsaechan</groupId>
         <artifactId>suh-api-log</artifactId>
-        <version>X.X.X</version> <!-- 최신 버전으로 설정 -->
+        <version>1.1.4</version>
     </dependency>
 </dependencies>
 
-<!-- 중요: Suh-Nexus 저장소 필수 추가 -->
+<!-- 중요: Suh-Nexus 저장소 필수 -->
 <repositories>
     <repository>
         <id>suh-project-releases</id>
-        <url>http://suh-project.synology.me:9999/repository/maven-releases/</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
+        <url>https://nexus.suhsaechan.me/repository/maven-releases/</url>
+        <releases><enabled>true</enabled></releases>
+        <snapshots><enabled>false</enabled></snapshots>
     </repository>
 </repositories>
 ```
 
-## 빠른 시작 가이드
+### 2. 즉시 사용 가능! 🎉
 
-### 1. 의존성 추가 및 저장소 설정
+의존성을 추가하는 순간부터:
+- ✅ API 변경 이력 추적 시스템이 활성화됩니다
+- ✅ GitHub 이슈와 자동 연동됩니다
+- ✅ Swagger UI에 변경 이력이 표시됩니다
 
-위 Gradle 또는 Maven 설정을 프로젝트에 추가합니다. **주의: Suh-Nexus 저장소 설정은 필수입니다.**
-
-### 2. 자동 설정 적용
-
-Spring Boot의 자동 설정 기능을 통해 별도의 설정 없이도 라이브러리가 자동으로 초기화됩니다.
-
-### 3. API 메서드에 변경 이력 어노테이션 추가
+### 3. API 변경 이력 추가
 
 ```java
 import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
 import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
 
     @ApiChangeLogs({
         @ApiChangeLog(
-            date = "2024-06-15",
+            date = "2024-12-15",
             author = "서새찬",
             issueNumber = 42,
-            description = "사용자 조회 API 추가"
+            description = "사용자 목록 조회 API 추가"
         ),
         @ApiChangeLog(
-            date = "2024-07-01",
-            author = "홍길동",
+            date = "2024-12-20",
+            author = "홍길동", 
             issueNumber = 45,
-            description = "페이징 기능 추가"
+            description = "페이징 및 정렬 기능 추가"
         )
     })
     @GetMapping("/api/users")
-    public ResponseEntity<List<User>> getUsers() {
-        // API 로직
+    public List<User> getUsers() {
+        return userService.findAll();
     }
 }
 ```
 
-### 4. Swagger UI에서 변경 이력 확인
+---
 
-SpringDoc 라이브러리가 포함되어 있다면, API 문서에 자동으로 변경 이력 테이블이 표시됩니다.
+## ⚙️ 설정 옵션
 
-## 설정 옵션
-
-`application.yml` 또는 `application.properties`에서 다음과 같이 설정할 수 있습니다:
+### 기본 설정 (application.yml)
 
 ```yaml
+# API 변경 이력 시스템 설정
 suhapilog:
-  # 기능 활성화 여부
-  enabled: true
-  
-  # GitHub 설정
+  enabled: true  # 기본값: true (자동 활성화)
   github:
     base-url: "https://github.com/username/repository/issues/"
-  
-  # 저장소 설정 (이슈 캐싱 위치)
   storage:
-    path: "github-issue"
-    
-  # 기본 작성자 (author가 비어있을 때 사용)
-  default-author: "SUHSAECHAN"
+    path: "./github-issues"  # 이슈 캐시 위치
+  default-author: "개발팀"   # 작성자 미지정시 기본값
 ```
 
-## 상세 사용법
+### 고급 설정
 
-### 여러 변경 이력 기록하기
+#### 선택적 비활성화
+```yaml
+# API 변경 이력 시스템 비활성화
+suhapilog:
+  enabled: false
+```
 
-하나의 API에 여러 변경 이력을 기록할 수 있습니다. 가장 최신 변경사항이 목록의 맨 위에 오도록 배치하는 것을 권장합니다.
+#### 개발/운영 환경별 설정
+```yaml
+# application-dev.yml (개발 환경)
+suhapilog:
+  github:
+    base-url: "https://github.com/dev-team/project/issues/"
+  default-author: "개발팀"
 
+# application-prod.yml (운영 환경) 
+suhapilog:
+  github:
+    base-url: "https://github.com/company/production-project/issues/"
+  default-author: "운영팀"
+```
+
+---
+
+## 📋 상세 사용법
+
+### API 변경 이력 관리
+
+#### 여러 변경 이력 기록
 ```java
 @ApiChangeLogs({
+    // 👆 최신 변경사항을 위에 배치 (권장)
     @ApiChangeLog(
-        date = "2024-07-10",
-        author = "서새찬",
-        issueNumber = 50,
-        description = "성능 최적화"
+        date = "2024-12-20",
+        author = "김개발",
+        issueNumber = 52,
+        description = "응답 속도 50% 개선"
     ),
     @ApiChangeLog(
-        date = "2024-06-20",
-        author = "홍길동",
-        issueNumber = 45,
-        description = "API 응답 형식 변경"
+        date = "2024-12-15", 
+        author = "이설계",
+        issueNumber = 48,
+        description = "페이징 파라미터 추가"
     ),
     @ApiChangeLog(
-        date = "2024-06-01",
+        date = "2024-12-01",
         author = "서새찬",
         issueNumber = 42,
         description = "API 최초 구현"
@@ -161,129 +184,148 @@ suhapilog:
 })
 ```
 
-### GitHub 이슈 없이 사용하기
-
-GitHub 이슈 번호를 지정하지 않고도 사용할 수 있습니다:
-
+#### GitHub 이슈 없이 사용
 ```java
 @ApiChangeLogs({
     @ApiChangeLog(
-        date = "2024-07-10",
-        author = "서새찬",
-        issueNumber = 0,  // 0이면 이슈 링크가 표시되지 않음
-        description = "성능 최적화"
+        date = "2024-12-20",
+        author = "",  // 비어있으면 default-author 사용
+        issueNumber = 0,  // 0이면 이슈 링크 표시 안함
+        description = "내부 리팩토링"
     )
 })
 ```
 
-### 인터페이스에 어노테이션 추가
-
-구현 클래스가 아닌 인터페이스에 어노테이션을 추가할 수 있습니다:
-
+#### 인터페이스에 어노테이션 추가
 ```java
 public interface UserService {
     @ApiChangeLogs({
         @ApiChangeLog(
-            date = "2024-06-15",
-            author = "서새찬",
+            date = "2024-12-15",
+            author = "서새찬", 
             issueNumber = 42,
-            description = "사용자 조회 API 추가"
+            description = "사용자 서비스 인터페이스 정의"
         )
     })
-    List<User> getUsers();
+    List<User> getAllUsers();
 }
 
-@RestController
+@RestController 
 public class UserController implements UserService {
     @GetMapping("/api/users")
     @Override
-    public List<User> getUsers() {
-        // API 구현
+    public List<User> getAllUsers() {
+        // 구현...
     }
 }
 ```
 
-## 맞춤 설정 예제
+### 커스텀 설정
 
-### 설정 파일 통한 커스터마이징
-
-```yaml
-suhapilog:
-  enabled: false                             # 기능 비활성화
-  storage:
-    path: "/var/data/api-changelog"          # 저장소 위치 변경
-  default-author: "개발팀"                    # 기본 작성자 설정
-  github:
-    base-url: "https://github.com/my-organization/my-project/issues/"  # GitHub 이슈 URL 변경
-```
-
-### 자체 설정 클래스 만들기
-
-필요한 경우 자체 설정 클래스를 작성할 수 있습니다:
-
+#### 사용자 정의 설정 클래스
 ```java
 @Configuration
-@EnableConfigurationProperties
-public class MyApiChangeLogConfig {
+public class ApiChangeLogConfig {
+    
     @Bean
-    @ConfigurationProperties(prefix = "suhapilog")
     public ApiChangeLogProperties apiChangeLogProperties() {
-        // 기본 속성에 추가 설정 적용
         ApiChangeLogProperties props = new ApiChangeLogProperties();
-        props.setDefaultAuthor("커스텀 작성자");
+        
+        // GitHub 설정
+        props.getGithub().setBaseUrl("https://github.com/myteam/project/issues/");
+        props.setDefaultAuthor("API팀");
+        
+        // 저장소 설정
+        props.getStorage().setPath("./api-changes");
+        
         return props;
     }
-    
-    // 다른 빈 커스터마이징...
 }
 ```
 
-## 프로젝트 구조
+---
+
+## 🎯 실제 출력 예시
+
+### Swagger UI 변경 이력 테이블
+
+SpringDoc이 포함된 프로젝트에서는 API 문서에 자동으로 변경 이력 테이블이 표시됩니다:
+
+| 날짜 | 작성자 | 이슈 | 변경 내용 |
+|------|--------|------|-----------|
+| 2024-12-20 | 김개발 | [#52](https://github.com/user/repo/issues/52) | 응답 속도 50% 개선 |
+| 2024-12-15 | 이설계 | [#48](https://github.com/user/repo/issues/48) | 페이징 파라미터 추가 |
+| 2024-12-01 | 서새찬 | [#42](https://github.com/user/repo/issues/42) | API 최초 구현 |
+
+---
+
+## 🏗️ 아키텍처
 
 ```
-- src/main/java
-  - me.suhsaechan.suhapilog
-    - annotation
-      - ApiChangeLog.java      # 단일 변경 이력 어노테이션
-      - ApiChangeLogs.java     # 변경 이력 컨테이너 어노테이션
-    - config
-      - ApiChangeLogProperties.java       # 설정 속성 클래스
-      - SuhApiLogAutoConfiguration.java   # Spring Boot 자동 설정
-    - model
-      - GithubIssue.java       # GitHub 이슈 모델
-    - service
-      - ChangelogProcessor.java    # 변경 이력 처리기
-      - GithubIssueService.java    # GitHub 이슈 서비스
-      - SwaggerIntegration.java    # Swagger 통합
-    - storage
-      - IssueRepository.java       # 이슈 저장소 인터페이스
-      - JsonIssueRepository.java   # JSON 파일 기반 구현
+suh-api-log
+├── 📝 API 변경 이력 시스템 (suhapilog)
+│   ├── @ApiChangeLogs 어노테이션 처리
+│   ├── GitHub 이슈 연동 및 캐싱 
+│   ├── Swagger UI 자동 통합
+│   ├── 변경 이력 HTML 테이블 생성
+│   └── 인터페이스 기반 어노테이션 지원
+│
+└── 🎨 순수 POJO 로거 (SuhApiLogger)
+    ├── Java Util Logging 기반 래퍼
+    ├── SLF4J 스타일 API 제공
+    ├── 기존 로깅 설정과 격리
+    └── 의존성 독립성 보장
 ```
 
-## 기술 요구사항
+---
 
-- Java 17 이상
-- Spring Boot 3.x
-- (선택) SpringDoc OpenAPI UI 2.x 이상 (Swagger UI 통합용)
+## 🔧 기술 요구사항
 
-## 기여하기
+- **Java**: 17 이상
+- **Spring Boot**: 3.x
+- **선택사항**: SpringDoc OpenAPI UI 2.x+ (Swagger UI 통합)
 
-버그 신고, 기능 요청, 코드 기여는 GitHub 저장소의 이슈 트래커를 통해 가능합니다:  
-[https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
+---
 
-## FAQ
+## 🤔 FAQ
 
-### Q: Spring Boot 2.x에서도 사용할 수 있나요?
-A: 현재 버전은 Spring Boot 3.x에 최적화되어 있습니다. Spring Boot 2.x 지원은 향후 계획 중입니다.
+### Q: 기존 로깅 설정에 영향을 주나요?
+A: **전혀 없습니다**. suh-api-log는 독립적인 로거를 사용하여 기존 Logback, Log4j2 등의 설정과 완전히 분리됩니다.
 
-### Q: GitHub 이외의 이슈 트래커를 지원하나요?
-A: 현재는 GitHub만 지원합니다. 다른 이슈 트래커 지원은 향후 검토할 예정입니다.
+### Q: 성능에 미치는 영향은?
+A: 효율적인 캐싱과 순수 POJO 설계로 성능 영향을 최소화했습니다. API 변경 이력 수집은 애플리케이션 시작 시에만 실행됩니다.
 
-### Q: 캐시된 이슈 정보는 어디에 저장되나요?
-A: 기본적으로 프로젝트 루트 디렉토리의 github-issue 폴더에 JSON 형식으로 저장됩니다. suhapilog.storage.path 설정으로 변경할 수 있습니다.
+### Q: Spring Boot 2.x에서 사용 가능한가요?
+A: 현재 버전은 Spring Boot 3.x 최적화입니다. 2.x 지원은 향후 계획에 있습니다.
 
-## 문의 및 지원
+### Q: GitHub 없이도 사용할 수 있나요?
+A: 네! GitHub 설정 없이도 기본적인 API 변경 이력 기능을 사용할 수 있습니다. GitHub 연동은 선택사항입니다.
 
-더 자세한 정보나 지원이 필요하면 다음 채널로 문의해주세요:
-- GitHub 이슈: [https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
-- 이메일: chan4760@gmail.com
+### Q: 외부 로깅 라이브러리와 충돌하나요?
+A: 전혀 없습니다. Java Util Logging 기반의 독립적인 로거를 사용하여 기존 로깅 설정과 완전히 분리됩니다.
+
+---
+
+## 🤝 기여하기
+
+버그 신고, 기능 요청, 코드 기여를 환영합니다!
+
+- **GitHub**: [https://github.com/Cassiiopeia/suh-api-log](https://github.com/Cassiiopeia/suh-api-log)
+- **이슈 트래커**: [https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
+- **이메일**: chan4760@gmail.com
+
+---
+
+## 📜 라이센스
+
+이 프로젝트는 MIT 라이센스 하에 배포됩니다.
+
+---
+
+<div align="center">
+
+**⚡ suh-api-log - Spring Boot API 변경 이력 문서화의 새로운 표준 ⚡**
+
+*한번 써보면 없으면 안 되는 그런 도구*
+
+</div>
