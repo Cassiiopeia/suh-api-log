@@ -1,4 +1,4 @@
-name: 🔧 CI Build Check
+name: PROJECT-SPRING-NEXUS-CI
 
 on:
   pull_request:

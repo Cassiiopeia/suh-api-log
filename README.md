@@ -3,7 +3,7 @@
 **suh-api-log**는 Spring Boot API 개발을 위한 **API 변경 이력 문서화 라이브러리**입니다. 코드 레벨에서 API 변경사항을 추적하고 GitHub 이슈와 연동하여 Swagger UI에 자동으로 문서화해주는 전문 도구입니다.
 
 <!-- 수정하지마세요 자동으로 동기화 됩니다 -->
-## 최신 버전 : v1.1.4 (2025-09-19)
+## 최신 버전 : v1.1.5 (2025-09-19)
 
 [전체 버전 기록 보기](CHANGELOG.md)
 
@@ -45,7 +45,7 @@ repositories {
     mavenCentral()
     // 중요: Suh-Nexus 저장소 필수
     maven {
-        url "https://nexus.suhsaechan.me/repository/maven-releases/"
+        url "https://nexus.suhsaechan.kr/repository/maven-releases/"
     }
 }
 
@@ -68,7 +68,7 @@ dependencies {
 <repositories>
     <repository>
         <id>suh-project-releases</id>
-        <url>https://nexus.suhsaechan.me/repository/maven-releases/</url>
+        <url>https://nexus.suhsaechan.kr/repository/maven-releases/</url>
         <releases><enabled>true</enabled></releases>
         <snapshots><enabled>false</enabled></snapshots>
     </repository>

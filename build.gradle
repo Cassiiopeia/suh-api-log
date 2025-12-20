@@ -79,8 +79,8 @@ publishing {
             name = 'nexus'
             url = uri(
                     version.endsWith('SNAPSHOT')
-                            ? "http://suh-project.synology.me:9999/repository/maven-snapshots/"
-                            : "http://suh-project.synology.me:9999/repository/maven-releases/"
+                            ? "https://nexus.suhsaechan.kr/repository/maven-snapshots/"
+                            : "https://nexus.suhsaechan.kr/repository/maven-releases/"
             )
             allowInsecureProtocol = true
             credentials {

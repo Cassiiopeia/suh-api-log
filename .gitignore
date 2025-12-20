@@ -42,3 +42,9 @@ out/
 /github-issue/
 /test-github-issue/github-issues.json
 /test-github-issue/github-issues-hash.json
+
+# ====================================================================
+# SUH-DEVOPS-TEMPLATE: Auto-added entries
+# ====================================================================
+/.claude/settings.local.json
+/.report
