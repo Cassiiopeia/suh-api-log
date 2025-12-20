@@ -1,11 +1,43 @@
 {
   "metadata": {
-    "lastUpdated": "2025-09-19T11:51:40Z",
-    "currentVersion": "1.1.5",
-    "projectType": "basic",
-    "totalReleases": 2
+    "lastUpdated": "2025-12-20T09:37:15Z",
+    "currentVersion": "1.2.1",
+    "projectType": "spring",
+    "totalReleases": 3
   },
   "releases": [
+    {
+      "version": "1.2.1",
+      "project_type": "spring",
+      "date": "2025-12-20",
+      "pr_number": 12,
+      "raw_summary": "## Summary by CodeRabbit\n\n# 릴리스 노트\n\n* **새로운 기능**\n  * QA 이슈 자동 생성 워크플로우 추가\n  * 파일 시스템 유틸리티 모듈 추가 (파일 복사, 삭제, 디렉토리 관리)\n\n* **개선**\n  * 버전 1.1.5에서 1.2.1로 업그레이드\n  * Nexus 저장소 URL을 새로운 HTTPS 서버로 업데이트\n  * GitHub 이슈 템플릿 및 PR 템플릿 개선\n  * 개발 워크플로우 가이드 및 문서 추가\n\n* **삭제**\n  * 레거시 프롬프트 가이드라인 문서 제거",
+      "parsed_changes": {
+        "새로운_기능": {
+          "title": "새로운 기능",
+          "items": [
+            "QA 이슈 자동 생성 워크플로우 추가",
+            "파일 시스템 유틸리티 모듈 추가 (파일 복사, 삭제, 디렉토리 관리)"
+          ]
+        },
+        "개선": {
+          "title": "개선",
+          "items": [
+            "버전 1.1.5에서 1.2.1로 업그레이드",
+            "Nexus 저장소 URL을 새로운 HTTPS 서버로 업데이트",
+            "GitHub 이슈 템플릿 및 PR 템플릿 개선",
+            "개발 워크플로우 가이드 및 문서 추가"
+          ]
+        },
+        "삭제": {
+          "title": "삭제",
+          "items": [
+            "레거시 프롬프트 가이드라인 문서 제거"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "1.1.5",
       "project_type": "basic",
