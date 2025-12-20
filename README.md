@@ -45,7 +45,7 @@ repositories {
     mavenCentral()
     // 중요: Suh-Nexus 저장소 필수
     maven {
-        url "https://nexus.suhsaechan.me/repository/maven-releases/"
+        url "https://nexus.suhsaechan.kr/repository/maven-releases/"
     }
 }
 
@@ -68,7 +68,7 @@ dependencies {
 <repositories>
     <repository>
         <id>suh-project-releases</id>
-        <url>https://nexus.suhsaechan.me/repository/maven-releases/</url>
+        <url>https://nexus.suhsaechan.kr/repository/maven-releases/</url>
         <releases><enabled>true</enabled></releases>
         <snapshots><enabled>false</enabled></snapshots>
     </repository>
