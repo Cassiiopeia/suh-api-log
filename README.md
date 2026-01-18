@@ -60,7 +60,7 @@ dependencies {
     <dependency>
         <groupId>me.suhsaechan</groupId>
         <artifactId>suh-api-log</artifactId>
-        <version>1.1.4</version>
+        <version>X.X.X</version> <!-- 최신 버전으로 설정 -->
     </dependency>
 </dependencies>
 
