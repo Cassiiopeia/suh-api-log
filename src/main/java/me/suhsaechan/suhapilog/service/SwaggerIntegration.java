@@ -1,7 +1,7 @@
 package me.suhsaechan.suhapilog.service;
 
-import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
-import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
+import me.suhsaechan.suhapilog.annotation.ApiLog;
+import me.suhsaechan.suhapilog.annotation.ApiLogs;
 import me.suhsaechan.suhapilog.util.SuhApiLogger;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
@@ -41,14 +41,23 @@ public class SwaggerIntegration {
       // 인터페이스와 구현 클래스 모두에서 어노테이션 검색 (TYPE_HIERARCHY로 인터페이스까지 검색)
       MergedAnnotations annotations = MergedAnnotations.from(handlerMethod.getMethod(),
           MergedAnnotations.SearchStrategy.TYPE_HIERARCHY);
-      MergedAnnotation<ApiChangeLogs> apiChangeLogsAnnotation = annotations.get(ApiChangeLogs.class);
+      MergedAnnotation<ApiLogs> apiLogsAnnotation = annotations.get(ApiLogs.class);
 
-      if (apiChangeLogsAnnotation.isPresent()) {
+      if (apiLogsAnnotation.isPresent()) {
+        // 복수 어노테이션 (@ApiLogs 또는 @ApiLog 여러 개) 발견
         log.debug("API 변경 이력 어노테이션 발견: {}", handlerMethod.getMethod().getName());
-        String tableHtml = generateApiChangeLogTable(apiChangeLogsAnnotation.synthesize().value());
+        String tableHtml = generateApiLogTable(apiLogsAnnotation.synthesize().value());
         descriptionSetter.invoke(operation, originalDescription + tableHtml);
       } else {
-        log.debug("API 변경 이력이 없음: {}", handlerMethod.getMethod().getName());
+        // @Repeatable 단일 어노테이션 확인 (인터페이스 포함)
+        MergedAnnotation<ApiLog> singleAnnotation = annotations.get(ApiLog.class);
+        if (singleAnnotation.isPresent()) {
+          log.debug("API 변경 이력 어노테이션(단일) 발견: {}", handlerMethod.getMethod().getName());
+          String tableHtml = generateApiLogTable(new ApiLog[]{singleAnnotation.synthesize()});
+          descriptionSetter.invoke(operation, originalDescription + tableHtml);
+        } else {
+          log.debug("API 변경 이력이 없음: {}", handlerMethod.getMethod().getName());
+        }
       }
 
       return operation;
@@ -61,7 +70,7 @@ public class SwaggerIntegration {
   /**
    * API 변경 이력 테이블 HTML 생성
    */
-  private String generateApiChangeLogTable(ApiChangeLog[] apiChangeLogs) {
+  private String generateApiLogTable(ApiLog[] apiLogs) {
     StringBuilder tableBuilder = new StringBuilder();
     tableBuilder.append("\n\n**API 변경 이력:**\n")
         .append("<table>")
@@ -76,8 +85,8 @@ public class SwaggerIntegration {
         .append("</thead>")
         .append("<tbody>");
 
-    for (ApiChangeLog apiChangeLog : apiChangeLogs) {
-      String description = apiChangeLog.description()
+    for (ApiLog apiLog : apiLogs) {
+      String description = apiLog.description()
           .replace("&", "&amp;")
           .replace("<", "&lt;")
           .replace(">", "&gt;");
@@ -85,15 +94,15 @@ public class SwaggerIntegration {
       String issueNumberCell = "";
       String issueTitleCell = "";
 
-      if (apiChangeLog.issueNumber() > 0) {
+      if (apiLog.issueNumber() > 0) {
         String issueUrl = githubIssueService.formatIssueBaseUrl(
             githubIssueService.getIssueBaseUrl(),
-            apiChangeLog.issueNumber());
+            apiLog.issueNumber());
         issueNumberCell = String.format("<a href=\"%s\" target=\"_blank\">#%d</a>",
-            issueUrl, apiChangeLog.issueNumber());
+            issueUrl, apiLog.issueNumber());
 
         try {
-          issueTitleCell = githubIssueService.getOrFetchIssue(apiChangeLog.issueNumber()).getCleanTitle();
+          issueTitleCell = githubIssueService.getOrFetchIssue(apiLog.issueNumber()).getCleanTitle();
           // HTML 엔티티 이스케이프
           issueTitleCell = issueTitleCell
               .replace("&", "&amp;")
@@ -107,8 +116,8 @@ public class SwaggerIntegration {
 
       tableBuilder.append(String.format(
           "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
-          apiChangeLog.date(),
-          apiChangeLog.author(),
+          apiLog.date(),
+          apiLog.author(),
           issueNumberCell,
           issueTitleCell,
           description));

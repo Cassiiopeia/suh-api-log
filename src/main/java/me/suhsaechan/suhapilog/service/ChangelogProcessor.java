@@ -3,8 +3,7 @@ package me.suhsaechan.suhapilog.service;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.TreeSet;
-import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
-import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
+import me.suhsaechan.suhapilog.annotation.ApiLog;
 import me.suhsaechan.suhapilog.util.SuhApiLogger;
 import org.springframework.web.method.HandlerMethod;
 
@@ -57,21 +56,20 @@ public void syncIssuesFromSource(Class<?>[] sources) {
 
     // 1. 인터페이스도 포함하여 모든 메서드 가져오기
     for (Method method : source.getMethods()) {
-      ApiChangeLogs apiChangeLogs = null;
+      // 직접 메서드에서 어노테이션 확인 (getAnnotationsByType은 @Repeatable 단일/복수 모두 처리)
+      ApiLog[] apiLogs = method.getAnnotationsByType(ApiLog.class);
 
-      // 직접 메서드에서 어노테이션 확인
-      if (method.isAnnotationPresent(ApiChangeLogs.class)) {
-        apiChangeLogs = method.getAnnotation(ApiChangeLogs.class);
-        log.debug("메서드 {}에서 직접 @ApiChangeLogs 발견", method.getName());
+      if (apiLogs.length > 0) {
+        log.debug("메서드 {}에서 @ApiLog {}개 발견", method.getName(), apiLogs.length);
       } else {
         // 인터페이스에서 동일한 메서드 찾기
         try {
           for (Class<?> iface : source.getInterfaces()) {
             try {
               Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
-              if (ifaceMethod.isAnnotationPresent(ApiChangeLogs.class)) {
-                apiChangeLogs = ifaceMethod.getAnnotation(ApiChangeLogs.class);
-                log.debug("인터페이스 {} 메서드 {}에서 @ApiChangeLogs 발견", iface.getSimpleName(), method.getName());
+              apiLogs = ifaceMethod.getAnnotationsByType(ApiLog.class);
+              if (apiLogs.length > 0) {
+                log.debug("인터페이스 {} 메서드 {}에서 @ApiLog {}개 발견", iface.getSimpleName(), method.getName(), apiLogs.length);
                 break;
               }
             } catch (NoSuchMethodException e) {
@@ -84,9 +82,9 @@ public void syncIssuesFromSource(Class<?>[] sources) {
       }
 
       // 발견된 어노테이션 처리
-      if (apiChangeLogs != null) {
-        for (ApiChangeLog changeLog : apiChangeLogs.value()) {
-          int issueNumber = changeLog.issueNumber();
+      if (apiLogs != null && apiLogs.length > 0) {
+        for (ApiLog apiLog : apiLogs) {
+          int issueNumber = apiLog.issueNumber();
           if (issueNumber > 0) {
             allIssueNumbers.add(issueNumber);
             log.debug("이슈 번호 추가: {}", issueNumber);

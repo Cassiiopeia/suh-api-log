@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import me.suhsaechan.suhapilog.annotation.ApiChangeLog;
-import me.suhsaechan.suhapilog.annotation.ApiChangeLogs;
+import me.suhsaechan.suhapilog.annotation.ApiLog;
 import me.suhsaechan.suhapilog.config.ApiChangeLogProperties;
 import me.suhsaechan.suhapilog.util.SuhApiLogger;
 import me.suhsaechan.suhapilog.model.GithubIssue;
@@ -134,12 +133,9 @@ public class GithubIssueService {
       return "";
     }
 
-    if (!method.isAnnotationPresent(ApiChangeLogs.class)) {
-      return "";
-    }
-
-    ApiChangeLog[] apiChangeLogs = method.getAnnotation(ApiChangeLogs.class).value();
-    if (apiChangeLogs.length == 0) {
+    // getAnnotationsByType은 @Repeatable 단일/복수 모두 처리
+    ApiLog[] apiLogs = method.getAnnotationsByType(ApiLog.class);
+    if (apiLogs.length == 0) {
       return "";
     }
 
@@ -157,22 +153,22 @@ public class GithubIssueService {
         .append("</thead>")
         .append("<tbody>");
 
-    for (ApiChangeLog apiChangeLog : apiChangeLogs) {
-      String description = escapeHtml(apiChangeLog.description());
+    for (ApiLog apiLog : apiLogs) {
+      String description = escapeHtml(apiLog.description());
       String issueNumberCell = "";
       String issueTitleCell = "";
-      String author = apiChangeLog.author();
+      String author = apiLog.author();
       if (author == null || author.isBlank()) {
         author = properties.getDefaultAuthor();
       }
 
-      if (apiChangeLog.issueNumber() > 0) {
-        String issueUrl = formatIssueBaseUrl(issueBaseUrl, apiChangeLog.issueNumber());
+      if (apiLog.issueNumber() > 0) {
+        String issueUrl = formatIssueBaseUrl(issueBaseUrl, apiLog.issueNumber());
         issueNumberCell = String.format("<a href=\"%s\" target=\"_blank\">#%d</a>",
-            issueUrl, apiChangeLog.issueNumber());
+            issueUrl, apiLog.issueNumber());
 
         try {
-          GithubIssue issue = getOrFetchIssue(apiChangeLog.issueNumber());
+          GithubIssue issue = getOrFetchIssue(apiLog.issueNumber());
           issueTitleCell = escapeHtml(issue.getCleanTitle());
         } catch (Exception e) {
           log.error("이슈 정보를 가져오는 데 실패했습니다: {}", e.getMessage());
@@ -183,8 +179,8 @@ public class GithubIssueService {
 
       tableBuilder.append(String.format(
           "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
-          apiChangeLog.date(),
-          escapeHtml(apiChangeLog.author()),
+          apiLog.date(),
+          escapeHtml(apiLog.author()),
           issueNumberCell,
           issueTitleCell,
           description));

@@ -31,21 +31,25 @@ public class ProjectRootResolver {
     public static Path resolveProjectRoot() {
         Path current = Paths.get("").toAbsolutePath();
         Path searchPath = current;
+        log.debug("프로젝트 루트 탐색 시작 - 현재 working directory: {}", current);
 
         while (searchPath != null) {
             // Gradle 멀티모듈 프로젝트 (settings.gradle 존재)
             if (Files.exists(searchPath.resolve("settings.gradle")) ||
                 Files.exists(searchPath.resolve("settings.gradle.kts"))) {
+                log.debug("프로젝트 루트 발견 (settings.gradle): {}", searchPath);
                 return searchPath;
             }
             // Git 루트 (.git 디렉토리 존재)
             if (Files.exists(searchPath.resolve(".git"))) {
+                log.debug("프로젝트 루트 발견 (.git): {}", searchPath);
                 return searchPath;
             }
             searchPath = searchPath.getParent();
         }
 
         // 찾지 못하면 현재 디렉토리 사용
+        log.debug("프로젝트 루트를 찾지 못함 - 현재 디렉토리 사용: {}", current);
         return current;
     }
 
@@ -63,18 +67,25 @@ public class ProjectRootResolver {
      * @return 절대 경로
      */
     public static Path resolveStoragePath(String configuredPath) {
+        log.debug("저장 경로 해석 시작 - 설정값: {}", configuredPath);
+
         if (configuredPath == null || configuredPath.isEmpty()) {
             configuredPath = "github-issues";
+            log.debug("설정값이 비어있어 기본값 사용: {}", configuredPath);
         }
 
         Path path = Paths.get(configuredPath);
 
         // 절대 경로면 그대로 사용
         if (path.isAbsolute()) {
-            return path.normalize();
+            Path resolved = path.normalize();
+            log.debug("절대 경로 사용: {}", resolved);
+            return resolved;
         }
 
         // 상대 경로면 프로젝트 루트 기준으로 변환
-        return resolveProjectRoot().resolve(configuredPath).normalize();
+        Path resolved = resolveProjectRoot().resolve(configuredPath).normalize();
+        log.debug("상대 경로를 프로젝트 루트 기준으로 변환: {}", resolved);
+        return resolved;
     }
 }
