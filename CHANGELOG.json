@@ -1,11 +1,42 @@
 {
   "metadata": {
-    "lastUpdated": "2025-12-20T09:37:15Z",
-    "currentVersion": "1.2.1",
+    "lastUpdated": "2026-01-18T14:39:04Z",
+    "currentVersion": "2.0.1",
     "projectType": "spring",
-    "totalReleases": 3
+    "totalReleases": 4
   },
   "releases": [
+    {
+      "version": "2.0.1",
+      "project_type": "spring",
+      "date": "2026-01-18",
+      "pr_number": 15,
+      "raw_summary": "## Summary by CodeRabbit\n\n* **New Features**\n  * 동일 요소에 대한 반복 가능한 주석 지원 추가\n\n* **Bug Fixes**\n  * 배포 워크플로우의 경합 조건 처리를 통한 CI/CD 안정성 개선\n\n* **Chores**\n  * 패키지 네임스페이스 전역 업데이트\n  * 버전 2.0.1로 업그레이드\n  * 계획 및 구현 워크플로우 문서화 개선\n  * 보고서의 민감 정보 처리 지침 강화",
+      "parsed_changes": {
+        "new_features": {
+          "title": "New Features",
+          "items": [
+            "동일 요소에 대한 반복 가능한 주석 지원 추가"
+          ]
+        },
+        "bug_fixes": {
+          "title": "Bug Fixes",
+          "items": [
+            "배포 워크플로우의 경합 조건 처리를 통한 CI/CD 안정성 개선"
+          ]
+        },
+        "chores": {
+          "title": "Chores",
+          "items": [
+            "패키지 네임스페이스 전역 업데이트",
+            "버전 2.0.1로 업그레이드",
+            "계획 및 구현 워크플로우 문서화 개선",
+            "보고서의 민감 정보 처리 지침 강화"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "1.2.1",
       "project_type": "spring",
