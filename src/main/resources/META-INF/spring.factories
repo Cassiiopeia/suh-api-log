@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-me.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration
+kr.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration
