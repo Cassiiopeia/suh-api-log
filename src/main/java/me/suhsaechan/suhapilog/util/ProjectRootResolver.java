@@ -9,6 +9,7 @@ import java.nio.file.Paths;
  * 멀티모듈 프로젝트에서 github-issues 폴더가 여러 모듈에 중복 생성되는 문제를 해결합니다.
  */
 public class ProjectRootResolver {
+    private static final SuhApiLogger log = SuhApiLogger.getLogger(ProjectRootResolver.class);
 
     private ProjectRootResolver() {
         // 유틸리티 클래스
