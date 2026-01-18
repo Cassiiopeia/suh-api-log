@@ -5,6 +5,7 @@ import me.suhsaechan.suhapilog.service.ChangelogProcessor;
 import me.suhsaechan.suhapilog.service.GithubIssueService;
 import me.suhsaechan.suhapilog.storage.IssueRepository;
 import me.suhsaechan.suhapilog.storage.JsonIssueRepository;
+import me.suhsaechan.suhapilog.util.ProjectRootResolver;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -37,7 +38,10 @@ public class SuhApiLogAutoConfiguration {
   @Bean
   @ConditionalOnMissingBean
   public IssueRepository issueRepository(ApiChangeLogProperties properties) {
-    return new JsonIssueRepository(properties.getStorage().getPath());
+    String resolvedPath = ProjectRootResolver
+        .resolveStoragePath(properties.getStorage().getPath())
+        .toString();
+    return new JsonIssueRepository(resolvedPath);
   }
 
   @Bean

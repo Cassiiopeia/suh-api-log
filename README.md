@@ -235,6 +235,8 @@ suhapilog:
 | `suhapilog.storage.path` | String | ./github-issues | 캐시 저장 경로 |
 | `suhapilog.default-author` | String | "" | 기본 작성자 |
 
+> 💡 **멀티모듈 프로젝트 지원**: 상대 경로(`./github-issues`) 사용 시, 라이브러리가 자동으로 프로젝트 루트(`settings.gradle` 또는 `.git` 위치)를 감지하여 해당 위치에 폴더를 생성합니다. 각 모듈마다 폴더가 중복 생성되지 않습니다.
+
 ### 환경별 설정 예시
 
 ```yaml
