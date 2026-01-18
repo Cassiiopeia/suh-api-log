@@ -70,13 +70,13 @@ repositories {
 
 **Gradle**
 ```groovy
-implementation 'me.suhsaechan:suh-api-log:X.X.X'
+implementation 'kr.suhsaechan:suh-api-log:X.X.X'
 ```
 
 **Maven**
 ```xml
 <dependency>
-    <groupId>me.suhsaechan</groupId>
+    <groupId>kr.suhsaechan</groupId>
     <artifactId>suh-api-log</artifactId>
     <version>X.X.X</version>
 </dependency>
