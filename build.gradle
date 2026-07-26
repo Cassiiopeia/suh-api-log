@@ -6,7 +6,13 @@ plugins {
 }
 
 group = 'kr.suhsaechan'
-version = project.findProperty('version') ?: '3.0.0'
+
+// Gradle의 project.version 기본값이 'unspecified'라 findProperty는 절대 null을 주지 않는다.
+// -Pversion 으로 넘어온 값만 채택하고, 없으면 아래 기본값을 쓴다 (version.yml과 동기화).
+def injectedVersion = project.findProperty('version')
+version = (injectedVersion == null || injectedVersion.toString() == 'unspecified')
+        ? '3.0.0'
+        : injectedVersion.toString()
 
 java {
     toolchain {
