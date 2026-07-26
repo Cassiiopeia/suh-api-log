@@ -6,52 +6,46 @@ plugins {
 }
 
 group = 'kr.suhsaechan'
-version = project.findProperty('version') ?: '1.0.4' 
-sourceCompatibility = '17'
+version = project.findProperty('version') ?: '3.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
-configurations {
-    // SLF4J 및 기타 로깅 관련 의존성 제외
-    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    all*.exclude group: 'ch.qos.logback', module: 'logback-classic'
-    all*.exclude group: 'org.slf4j', module: 'slf4j-api'
-    all*.exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
-    all*.exclude group: 'org.slf4j', module: 'jul-to-slf4j'
-}
-
 dependencies {
-    // Spring
-    compileOnly('org.springframework.boot:spring-boot-autoconfigure') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
-    compileOnly('org.springframework:spring-context') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
+    // Spring — 라이브러리이므로 consumer에게 강제하지 않는다
+    compileOnly 'org.springframework.boot:spring-boot-autoconfigure'
+    compileOnly 'org.springframework:spring-context'
+    compileOnly 'org.springframework:spring-web'
 
-    // API 문서화
-    implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
+    // 로깅 API — 상위 프로젝트에 이미 있으면 그것을 쓰고, 없으면 JUL로 폴백한다.
+    // compileOnly라 consumer 에게 어떤 로깅 구현체도 강제하지 않는다.
+    compileOnly 'org.slf4j:slf4j-api'
+    compileOnly 'org.apache.logging.log4j:log4j-api'
+
+    // Swagger 통합 — springdoc이 있을 때만 동작하므로 런타임 의존성으로 끌고 가지 않는다
+    compileOnly 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    // Jackson 의존성
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
     implementation 'org.jsoup:jsoup:1.18.1'
 
-    api 'org.reflections:reflections:0.10.2'
-
-    // 테스트 의존성
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
-    testImplementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
+    // 테스트 — spring-boot-starter-test가 slf4j-api + logback을 끌고 온다
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-autoconfigure'
+    testImplementation 'org.springframework:spring-web'
+    testImplementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+    testImplementation 'org.apache.logging.log4j:log4j-api'
+    testImplementation 'org.apache.logging.log4j:log4j-core'
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
@@ -60,7 +54,14 @@ test {
 }
 
 bootJar { enabled = false }
-jar { enabled = true }
+
+jar {
+    enabled = true
+    manifest {
+        attributes('Implementation-Title': 'suh-api-log',
+                   'Implementation-Version': project.version)
+    }
+}
 
 publishing {
     publications {
@@ -82,10 +83,11 @@ publishing {
                             ? "https://nexus.suhsaechan.kr/repository/maven-snapshots/"
                             : "https://nexus.suhsaechan.kr/repository/maven-releases/"
             )
-            allowInsecureProtocol = true
             credentials {
-                username = project.findProperty('nexusUsername')
-                password = project.findProperty('nexusPassword')
+                // 자격증명은 리포지토리에 커밋하지 않는다.
+                // ~/.gradle/gradle.properties 또는 ORG_GRADLE_PROJECT_* 환경변수로 주입한다.
+                username = project.findProperty('nexusUsername') ?: System.getenv('NEXUS_USERNAME')
+                password = project.findProperty('nexusPassword') ?: System.getenv('NEXUS_PASSWORD')
             }
         }
     }
