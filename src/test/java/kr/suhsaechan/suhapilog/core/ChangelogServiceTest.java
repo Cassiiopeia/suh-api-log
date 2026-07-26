@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import kr.suhsaechan.suhapilog.annotation.ApiLog;
-import kr.suhsaechan.suhapilog.core.IssueResolverTest.InMemoryRepository;
+import kr.suhsaechan.suhapilog.testsupport.InMemoryIssueRepository;
 import kr.suhsaechan.suhapilog.render.HtmlTableChangelogRenderer;
 import kr.suhsaechan.suhapilog.render.HtmlTableChangelogRenderer.Options;
 import kr.suhsaechan.suhapilog.spi.ApiLogEntry;
@@ -41,7 +41,7 @@ class ChangelogServiceTest {
     IssueFetcher fetcher = number -> fetchSucceeds
         ? Optional.of(new IssueRef(number, "로깅 위임", "raw", BASE + number, LocalDateTime.now()))
         : Optional.empty();
-    IssueResolver resolver = new IssueResolver(new InMemoryRepository(), fetcher, null);
+    IssueResolver resolver = new IssueResolver(new InMemoryIssueRepository(), fetcher, null);
     return new ChangelogService(resolver,
         new HtmlTableChangelogRenderer(Options.defaults()), BASE, defaultAuthor);
   }

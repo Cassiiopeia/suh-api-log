@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import kr.suhsaechan.suhapilog.annotation.ApiLog;
-import kr.suhsaechan.suhapilog.core.IssueResolverTest.InMemoryRepository;
+import kr.suhsaechan.suhapilog.testsupport.InMemoryIssueRepository;
 import kr.suhsaechan.suhapilog.spi.IssueFetcher;
 import kr.suhsaechan.suhapilog.spi.IssueRef;
 import org.junit.jupiter.api.Test;
@@ -40,13 +40,13 @@ class IssueSyncCoordinatorTest {
     }
   }
 
-  private IssueSyncCoordinator coordinator(InMemoryRepository repo, Counter fetcher) {
+  private IssueSyncCoordinator coordinator(InMemoryIssueRepository repo, Counter fetcher) {
     return new IssueSyncCoordinator(new IssueResolver(repo, fetcher, null), repo, 4);
   }
 
   @Test
   void 최초_동기화는_이슈를_조회하고_해시를_기록한다() {
-    InMemoryRepository repo = new InMemoryRepository();
+    InMemoryIssueRepository repo = new InMemoryIssueRepository();
     Counter fetcher = new Counter();
 
     assertThat(coordinator(repo, fetcher).sync(Controller.class)).isTrue();
@@ -58,7 +58,7 @@ class IssueSyncCoordinatorTest {
 
   @Test
   void 해시가_같고_캐시가_있으면_네트워크_조회를_건너뛴다() {
-    InMemoryRepository repo = new InMemoryRepository();
+    InMemoryIssueRepository repo = new InMemoryIssueRepository();
     Counter fetcher = new Counter();
     IssueSyncCoordinator coordinator = coordinator(repo, fetcher);
 
@@ -71,7 +71,7 @@ class IssueSyncCoordinatorTest {
 
   @Test
   void 해시가_같아도_캐시가_비면_다시_조회한다() {
-    InMemoryRepository repo = new InMemoryRepository();
+    InMemoryIssueRepository repo = new InMemoryIssueRepository();
     Counter fetcher = new Counter();
     IssueSyncCoordinator coordinator = coordinator(repo, fetcher);
 
@@ -84,7 +84,7 @@ class IssueSyncCoordinatorTest {
 
   @Test
   void 어노테이션이_없으면_아무것도_하지_않는다() {
-    InMemoryRepository repo = new InMemoryRepository();
+    InMemoryIssueRepository repo = new InMemoryIssueRepository();
     Counter fetcher = new Counter();
 
     assertThat(coordinator(repo, fetcher).sync(NoAnnotation.class)).isFalse();
