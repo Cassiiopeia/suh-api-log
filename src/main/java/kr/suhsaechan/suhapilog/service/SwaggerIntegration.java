@@ -2,7 +2,8 @@ package kr.suhsaechan.suhapilog.service;
 
 import kr.suhsaechan.suhapilog.annotation.ApiLog;
 import kr.suhsaechan.suhapilog.annotation.ApiLogs;
-import kr.suhsaechan.suhapilog.util.SuhApiLogger;
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.web.method.HandlerMethod;
@@ -12,7 +13,7 @@ import org.springframework.web.method.HandlerMethod;
  * 이 클래스는 Swagger/SpringDoc이 존재할 때만 실제로 작동하도록 설계됨
  */
 public class SwaggerIntegration {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(SwaggerIntegration.class);
+  private static final SuhLogger log = SuhLog.getLogger(SwaggerIntegration.class);
 
   private final GithubIssueService githubIssueService;
 

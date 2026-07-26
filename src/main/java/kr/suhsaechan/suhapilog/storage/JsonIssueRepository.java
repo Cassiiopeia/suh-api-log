@@ -22,13 +22,14 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import kr.suhsaechan.suhapilog.model.GithubIssue;
-import kr.suhsaechan.suhapilog.util.SuhApiLogger;
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
 
 /**
  * GitHub 이슈 정보를 JSON 파일로 저장하고 조회하는 리포지토리
  */
 public class JsonIssueRepository implements IssueRepository {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(JsonIssueRepository.class);
+  private static final SuhLogger log = SuhLog.getLogger(JsonIssueRepository.class);
 
   private static final String ISSUES_FILE = "github-issues.json";
   private static final String HASH_FILE = "github-issues-hash.json";

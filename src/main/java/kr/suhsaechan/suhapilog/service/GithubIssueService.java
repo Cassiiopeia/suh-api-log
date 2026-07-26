@@ -9,7 +9,8 @@ import java.util.Set;
 
 import kr.suhsaechan.suhapilog.annotation.ApiLog;
 import kr.suhsaechan.suhapilog.config.ApiChangeLogProperties;
-import kr.suhsaechan.suhapilog.util.SuhApiLogger;
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
 import kr.suhsaechan.suhapilog.model.GithubIssue;
 import kr.suhsaechan.suhapilog.storage.IssueRepository;
 import org.jsoup.Jsoup;
@@ -19,7 +20,7 @@ import org.jsoup.nodes.Document;
  * GitHub 이슈 정보를 관리하는 서비스
  */
 public class GithubIssueService {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(GithubIssueService.class);
+  private static final SuhLogger log = SuhLog.getLogger(GithubIssueService.class);
 
   private final IssueRepository issueRepository;
   private final String issueBaseUrl;

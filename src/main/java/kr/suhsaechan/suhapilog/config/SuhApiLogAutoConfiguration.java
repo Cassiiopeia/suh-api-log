@@ -17,7 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
-import kr.suhsaechan.suhapilog.util.SuhApiLogger;
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
 
 /**
  * API Changelog 자동 설정 클래스
@@ -27,7 +28,7 @@ import kr.suhsaechan.suhapilog.util.SuhApiLogger;
 @ConditionalOnProperty(prefix = "suhapilog", name = "enabled", havingValue = "true", matchIfMissing = true)
 @AutoConfiguration
 public class SuhApiLogAutoConfiguration {
-  private static final SuhApiLogger log = SuhApiLogger.getLogger(SuhApiLogAutoConfiguration.class);
+  private static final SuhLogger log = SuhLog.getLogger(SuhApiLogAutoConfiguration.class);
 
   @Bean
   @ConfigurationProperties(prefix = "suhapilog")
