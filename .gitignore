@@ -48,3 +48,6 @@ out/
 # ====================================================================
 /.claude/settings.local.json
 /.report
+
+# 로컬 자격증명 (Nexus 인증 등)
+gradle-local.properties
