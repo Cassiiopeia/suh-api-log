@@ -15,7 +15,7 @@ SUH API Log에 관심 가져주셔서 고맙습니다. 버그 제보, 기능 제
 |------|------|
 | JDK | 17 이상 |
 | Gradle | 동봉된 Wrapper 사용 (`./gradlew`) |
-| Spring Boot | 3.x |
+| Spring Boot | 3.x (컴파일 기준), 4.x (호환 확인) |
 
 ```bash
 git clone https://github.com/Cassiiopeia/suh-api-log.git
@@ -28,10 +28,12 @@ Nexus 배포 자격증명은 필요 없습니다. 로컬 빌드·테스트·`pub
 
 ### 실제 화면으로 확인하기
 
-`examples/demo`는 이 레포의 소스를 그대로 끌어다 쓰는 예제 앱입니다 (`includeBuild`).
+`examples/demo`(Spring Boot 3)와 `examples/demo-boot4`(Spring Boot 4)는 이 레포의 소스를 그대로 끌어다 쓰는 예제 앱입니다 (`includeBuild`).
+두 앱은 같은 컨트롤러를 공유하며, PR마다 `PROJECT-SPRING-COMPAT-CHECK` 워크플로우가 둘 다 띄워 확인합니다.
 
 ```bash
-./gradlew -p examples/demo bootRun
+./gradlew -p examples/demo bootRun        # Boot 3
+./gradlew -p examples/demo-boot4 bootRun  # Boot 4
 # http://localhost:8080/swagger-ui/index.html 에서 GET /api/users 를 펼쳐 보세요
 ```
 
@@ -55,6 +57,7 @@ src/main/java/kr/suhsaechan/suhapilog/
 
 ## 지켜 주세요
 
+- **Boot 3 기준으로 컴파일합니다.** Boot 4에만 있는 API를 쓰면 3.x 사용자가 깨집니다. Boot 4에서 바뀐 API가 필요하면 리플렉션·조건부 설정으로 분기하고 두 예제 앱에서 확인해 주세요.
 - **런타임 의존성을 늘리지 않습니다.** Spring·springdoc·로깅은 `compileOnly`입니다. 사용하는 쪽 프로젝트에 무언가를 강제하는 변경은 이슈에서 먼저 논의해 주세요.
 - **로깅은 `SuhLog`로만.** 라이브러리 코드에서 SLF4J·Log4j2를 직접 부르지 않습니다.
 - **새 동작에는 테스트를 붙입니다.** 기존 테스트는 `src/test/java`에 패키지별로 있습니다.

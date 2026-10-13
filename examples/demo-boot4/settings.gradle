@@ -1,0 +1,4 @@
+rootProject.name = 'suh-api-log-demo-boot4'
+
+// 레포 루트의 라이브러리를 그대로 끌어와 Spring Boot 4 위에서 동작을 확인한다
+includeBuild('../..')
