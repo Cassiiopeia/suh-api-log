@@ -1,0 +1,4 @@
+rootProject.name = 'suh-api-log-demo'
+
+// 레포 루트의 라이브러리를 그대로 끌어와 쓴다 (배포본이 아니라 현재 소스로 동작 확인)
+includeBuild('../..')

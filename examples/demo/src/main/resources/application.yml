@@ -1,0 +1,6 @@
+suhapilog:
+  github:
+    base-url: "https://github.com/Cassiiopeia/suh-api-log/issues/"
+  # 이슈 제목 캐시는 데모 폴더 안에만 둔다
+  storage:
+    path: "./build/github-issues"

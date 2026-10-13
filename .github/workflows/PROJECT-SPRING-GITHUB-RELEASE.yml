@@ -1,0 +1,52 @@
+# ===================================================================
+# GitHub Release 생성 워크플로우
+# ===================================================================
+#
+# deploy 브랜치에 배포가 들어오면 version.yml 의 버전으로 GitHub Release 를 만든다.
+# 태그(vX.Y.Z)는 버전 관리 워크플로우가 이미 만들어 두므로 여기서는 태그를 새로 찍지 않는다.
+# 수동 실행(workflow_dispatch)으로 과거 태그의 Release 를 채울 수도 있다.
+# ===================================================================
+
+name: PROJECT-SPRING-GITHUB-RELEASE
+
+on:
+  push:
+    branches: ["deploy"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release 를 만들 기존 태그 (예: v3.0.1). 비우면 version.yml 기준"
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 태그 결정
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            chmod +x .github/scripts/version_manager.sh
+            TAG="v$(./.github/scripts/version_manager.sh get | tail -n 1)"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "🏷️ 대상 태그: $TAG"
+
+      - name: Release 생성 (이미 있으면 건너뜀)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "ℹ️ $TAG Release 가 이미 있어 건너뜁니다"
+            exit 0
+          fi
+          # --verify-tag: 태그가 아직 없으면 엉뚱한 커밋에 태그를 만들지 않고 실패시킨다
+          gh release create "$TAG" --verify-tag --title "$TAG" --generate-notes

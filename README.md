@@ -12,8 +12,10 @@
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=flat-square&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE.md)
+[![JitPack](https://jitpack.io/v/Cassiiopeia/suh-api-log.svg)](https://jitpack.io/#Cassiiopeia/suh-api-log)
+[![Docs](https://img.shields.io/badge/문서-GitHub_Pages-3F51B5?style=flat-square&logo=materialformkdocs&logoColor=white)](https://cassiiopeia.github.io/suh-api-log/)
 
-[빠른 시작](#-빠른-시작) • [주요 기능](#-주요-기능) • [API 문서](#-api-레퍼런스) • [설정](#%EF%B8%8F-설정) • [CHANGELOG](CHANGELOG.md)
+[📚 문서 사이트](https://cassiiopeia.github.io/suh-api-log/) • [빠른 시작](#-빠른-시작) • [주요 기능](#-주요-기능) • [설정](#%EF%B8%8F-설정) • [CHANGELOG](CHANGELOG.md)
 
 </div>
 
@@ -33,27 +35,37 @@ API 변경 이력을 직접 관리하려면 **문서 별도 작성, 버전 관�
 | 외부 로깅 라이브러리 충돌 | ✅ 상위 프로젝트 로깅 설정에 완전 위임 (의존성 강제 없음) |
 
 ```java
-@ApiLog(date = "2024-12-20", author = "서새찬", issueNumber = 42, description = "사용자 조회 API 추가")
+@ApiLog(date = "2026-07-31", author = "서새찬", issueNumber = 17, description = "응답 필드 정리 및 로깅 위임")
+@ApiLog(date = "2025-05-28", author = "서새찬", issueNumber = 1, description = "사용자 목록 조회 API 최초 구현")
 @GetMapping("/api/users")
 public List<User> getUsers() { ... }
 ```
+
+⬇️ Swagger UI에 이렇게 나타납니다 (이슈 제목은 GitHub에서 자동으로 가져옴)
+
+![Swagger UI에 표시된 API 변경 이력 표](site/docs/assets/swagger-changelog.png)
+
+> 위 화면은 [`examples/demo`](examples/demo) 앱을 실제로 띄워 찍은 것입니다. `./gradlew -p examples/demo bootRun`으로 직접 확인할 수 있습니다.
 
 ---
 
 ## 🚀 빠른 시작
 
-### 1. 저장소 추가
+### 1. 의존성 추가 (JitPack)
 
-> ⚠️ **중요**: 이 라이브러리는 Maven Central이 아닌 **SUH Nexus 저장소**에서 제공됩니다.
+GitHub 태그로 바로 받습니다. 별도 계정이나 설정이 필요 없습니다.
 
 **Gradle (build.gradle)**
 ```groovy
 repositories {
     mavenCentral()
-    maven {
-        name = 'SUH-NEXUS'
-        url "https://nexus.suhsaechan.kr/repository/maven-releases/"
-    }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.Cassiiopeia:suh-api-log:v3.0.2'
+    // Swagger UI 통합을 쓴다면 springdoc 을 직접 선언 (3.0.0부터)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
 }
 ```
 
@@ -61,26 +73,42 @@ repositories {
 ```xml
 <repositories>
     <repository>
-        <id>suh-nexus</id>
-        <url>https://nexus.suhsaechan.kr/repository/maven-releases/</url>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
     </repository>
 </repositories>
-```
 
-### 2. 의존성 추가
-
-**Gradle**
-```groovy
-implementation 'kr.suhsaechan:suh-api-log:X.X.X'
-```
-
-**Maven**
-```xml
 <dependency>
-    <groupId>kr.suhsaechan</groupId>
+    <groupId>com.github.Cassiiopeia</groupId>
     <artifactId>suh-api-log</artifactId>
-    <version>X.X.X</version>
+    <version>v3.0.2</version>
 </dependency>
+```
+
+<details>
+<summary>SUH Nexus 저장소로 받기</summary>
+
+```groovy
+repositories {
+    mavenCentral()
+    maven { url 'https://nexus.suhsaechan.kr/repository/maven-releases/' }
+}
+
+dependencies {
+    implementation 'kr.suhsaechan:suh-api-log:3.0.2'
+}
+```
+
+</details>
+
+> 최신 버전은 위 JitPack 배지나 [Releases](https://github.com/Cassiiopeia/suh-api-log/releases)에서 확인하세요.
+
+### 2. 이슈 연동 켜기 (선택)
+
+```yaml
+suhapilog:
+  github:
+    base-url: "https://github.com/{owner}/{repo}/issues/"
 ```
 
 ### 3. 바로 사용
@@ -279,7 +307,7 @@ public IssueFetcher gitlabIssueFetcher() {
 
 ```groovy
 dependencies {
-    implementation 'kr.suhsaechan:suh-api-log:3.0.0'
+    implementation 'kr.suhsaechan:suh-api-log:3.0.2'
     // Swagger 통합을 쓴다면 직접 선언
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
 }
@@ -320,10 +348,15 @@ dependencies {
 ## 🤔 FAQ
 
 **Q: 기존 로깅 설정에 영향을 주나요?**
-A: 전혀 없습니다. Java Util Logging 기반의 독립 로거를 사용하여 기존 Logback, Log4j2 등과 완전히 분리됩니다.
+A: 없습니다. 로깅 구현체를 끌고 오지 않고 상위 프로젝트의 SLF4J/Log4j2 설정을 그대로 따릅니다. 이 라이브러리 로그만 조정하려면 `suhapilog.logging.*`를 쓰세요.
 
 **Q: GitHub 없이도 사용할 수 있나요?**
 A: 네! `issueNumber`를 생략하면 이슈 링크 없이 변경 이력만 표시됩니다.
+
+**Q: 비공개 레포 이슈도 되나요?**
+A: 기본 조회기는 공개 이슈 페이지를 읽습니다. 비공개 레포·GitLab·Jira는 `IssueFetcher` 빈을 직접 등록하세요 ([확장하기](https://cassiiopeia.github.io/suh-api-log/extending/)).
+
+더 많은 질문은 [문서 사이트 FAQ](https://cassiiopeia.github.io/suh-api-log/faq/)에 있습니다.
 
 ---
 
@@ -331,8 +364,9 @@ A: 네! `issueNumber`를 생략하면 이슈 링크 없이 변경 이력만 표�
 
 버그 신고, 기능 요청, 코드 기여를 환영합니다!
 
-- **GitHub**: [https://github.com/Cassiiopeia/suh-api-log](https://github.com/Cassiiopeia/suh-api-log)
-- **이슈 트래커**: [https://github.com/Cassiiopeia/suh-api-log/issues](https://github.com/Cassiiopeia/suh-api-log/issues)
+- **기여 가이드**: [CONTRIBUTING.md](CONTRIBUTING.md) — 개발 환경, 테스트, PR 방법
+- **이슈 트래커**: [버그·기능 요청 올리기](https://github.com/Cassiiopeia/suh-api-log/issues/new/choose)
+- **보안 취약점**: 공개 이슈 대신 [SECURITY.md](SECURITY.md)의 비공개 신고 경로를 이용해 주세요
 
 ---
 

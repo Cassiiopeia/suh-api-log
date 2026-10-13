@@ -1,0 +1,71 @@
+# 문서 사이트 설정 — 원본은 site/docs/, 배포는 PROJECT-DOCS-PAGES-DEPLOY 워크플로우가 한다.
+site_name: SUH API Log
+site_description: 어노테이션 한 줄로 API 변경 이력을 Swagger UI에 자동 표시하는 Spring Boot 라이브러리
+site_url: https://cassiiopeia.github.io/suh-api-log/
+repo_url: https://github.com/Cassiiopeia/suh-api-log
+repo_name: Cassiiopeia/suh-api-log
+edit_uri: edit/main/site/docs/
+copyright: MIT License · SUH-LAB
+
+theme:
+  name: material
+  language: ko
+  icon:
+    logo: material/history
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 다크 모드
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 라이트 모드
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - content.tabs.link
+    - search.highlight
+
+nav:
+  - 소개: index.md
+  - 시작하기: getting-started.md
+  - 사용법: usage.md
+  - 설정: configuration.md
+  - 로깅: logging.md
+  - 확장하기: extending.md
+  - 3.0.0 마이그레이션: migration-3.0.md
+  - FAQ: faq.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search:
+      lang:
+        - en
