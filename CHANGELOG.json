@@ -1,11 +1,47 @@
 {
   "metadata": {
-    "lastUpdated": "2026-10-13T11:17:39Z",
-    "currentVersion": "3.0.2",
+    "lastUpdated": "2026-10-13T13:31:38Z",
+    "currentVersion": "3.1.0",
     "projectType": "spring",
-    "totalReleases": 5
+    "totalReleases": 6,
+    "projectTypes": [
+      "spring"
+    ]
   },
   "releases": [
+    {
+      "version": "3.1.0",
+      "project_type": "spring",
+      "project_types": [
+        "spring"
+      ],
+      "date": "2026-10-13",
+      "pr_number": 30,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * Spring Boot 4 프로젝트에서도 사용 가능\n  * Spring Boot 4용 예제 앱 추가\n\n* **개선**\n  * 의존 라이브러리를 최신 안정 버전으로 업데이트\n  * Spring Boot 3과 4에서의 동작을 매번 자동으로 확인\n\n* **문서**\n  * Spring Boot 버전별 설치 방법 안내 추가",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "Spring Boot 4 프로젝트에서도 사용 가능",
+            "Spring Boot 4용 예제 앱 추가"
+          ]
+        },
+        "개선": {
+          "title": "개선",
+          "items": [
+            "의존 라이브러리를 최신 안정 버전으로 업데이트",
+            "Spring Boot 3과 4에서의 동작을 매번 자동으로 확인"
+          ]
+        },
+        "문서": {
+          "title": "문서",
+          "items": [
+            "Spring Boot 버전별 설치 방법 안내 추가"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "3.0.2",
       "project_type": "spring",
