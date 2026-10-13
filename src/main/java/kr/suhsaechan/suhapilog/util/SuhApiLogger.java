@@ -1,191 +1,63 @@
 package kr.suhsaechan.suhapilog.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
 
 /**
- * SLF4J 스타일 API를 제공하는 Java Util Logging 래퍼
- * 상위 프로젝트에 로깅 의존성 영향을 주지 않으면서 IntelliJ 스타일 로깅 지원
+ * 하위 호환용 shim.
+ *
+ * @deprecated 3.0.0부터 {@link SuhLog}로 대체되었다. 이 클래스는 3.1.0에서 제거된다.
+ *     기존 JUL 직접 사용과 달리, 이제 상위 프로젝트의 로깅 백엔드에 위임한다.
  */
-public class SuhApiLogger {
-    private final Logger logger;
+@Deprecated(since = "3.0.0", forRemoval = true)
+public class SuhApiLogger implements SuhLogger {
 
-    private SuhApiLogger(Logger logger) {
-        this.logger = logger;
-    }
+  private final SuhLogger delegate;
 
-    public static SuhApiLogger getLogger(Class<?> clazz) {
-        return new SuhApiLogger(Logger.getLogger(clazz.getName()));
-    }
+  private SuhApiLogger(SuhLogger delegate) {
+    this.delegate = delegate;
+  }
 
-    public static SuhApiLogger getLogger(String name) {
-        return new SuhApiLogger(Logger.getLogger(name));
-    }
+  public static SuhApiLogger getLogger(Class<?> clazz) {
+    return new SuhApiLogger(SuhLog.getLogger(clazz));
+  }
 
-    // Debug 레벨 로깅
-    public void debug(String message) {
-        logger.log(Level.FINE, message);
-    }
+  public static SuhApiLogger getLogger(String name) {
+    return new SuhApiLogger(SuhLog.getLogger(name));
+  }
 
-    public void debug(String message, Object arg) {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, formatMessage(message, arg));
-        }
-    }
+  @Override public void trace(String message) { delegate.trace(message); }
 
-    public void debug(String message, Object arg1, Object arg2) {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, formatMessage(message, arg1, arg2));
-        }
-    }
+  @Override public void trace(String message, Object... args) { delegate.trace(message, args); }
 
-    public void debug(String message, Object... args) {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, formatMessage(message, args));
-        }
-    }
+  @Override public void debug(String message) { delegate.debug(message); }
 
-    // Info 레벨 로깅
-    public void info(String message) {
-        logger.info(message);
-    }
+  @Override public void debug(String message, Object... args) { delegate.debug(message, args); }
 
-    public void info(String message, Object arg) {
-        if (logger.isLoggable(Level.INFO)) {
-            logger.info(formatMessage(message, arg));
-        }
-    }
+  @Override public void info(String message) { delegate.info(message); }
 
-    public void info(String message, Object arg1, Object arg2) {
-        if (logger.isLoggable(Level.INFO)) {
-            logger.info(formatMessage(message, arg1, arg2));
-        }
-    }
+  @Override public void info(String message, Object... args) { delegate.info(message, args); }
 
-    public void info(String message, Object... args) {
-        if (logger.isLoggable(Level.INFO)) {
-            logger.info(formatMessage(message, args));
-        }
-    }
+  @Override public void warn(String message) { delegate.warn(message); }
 
-    // Warn 레벨 로깅
-    public void warn(String message) {
-        logger.warning(message);
-    }
+  @Override public void warn(String message, Object... args) { delegate.warn(message, args); }
 
-    public void warn(String message, Object arg) {
-        if (logger.isLoggable(Level.WARNING)) {
-            logger.warning(formatMessage(message, arg));
-        }
-    }
+  @Override public void error(String message) { delegate.error(message); }
 
-    public void warn(String message, Object arg1, Object arg2) {
-        if (logger.isLoggable(Level.WARNING)) {
-            logger.warning(formatMessage(message, arg1, arg2));
-        }
-    }
+  @Override public void error(String message, Object... args) { delegate.error(message, args); }
 
-    public void warn(String message, Object... args) {
-        if (logger.isLoggable(Level.WARNING)) {
-            logger.warning(formatMessage(message, args));
-        }
-    }
+  @Override
+  public void error(String message, Throwable throwable) {
+    delegate.error(message, throwable);
+  }
 
-    // Error 레벨 로깅
-    public void error(String message) {
-        logger.severe(message);
-    }
+  @Override public boolean isTraceEnabled() { return delegate.isTraceEnabled(); }
 
-    public void error(String message, Object arg) {
-        if (logger.isLoggable(Level.SEVERE)) {
-            logger.severe(formatMessage(message, arg));
-        }
-    }
+  @Override public boolean isDebugEnabled() { return delegate.isDebugEnabled(); }
 
-    public void error(String message, Object arg1, Object arg2) {
-        if (logger.isLoggable(Level.SEVERE)) {
-            logger.severe(formatMessage(message, arg1, arg2));
-        }
-    }
+  @Override public boolean isInfoEnabled() { return delegate.isInfoEnabled(); }
 
-    public void error(String message, Object... args) {
-        if (logger.isLoggable(Level.SEVERE)) {
-            logger.severe(formatMessage(message, args));
-        }
-    }
+  @Override public boolean isWarnEnabled() { return delegate.isWarnEnabled(); }
 
-    public void error(String message, Throwable throwable) {
-        logger.log(Level.SEVERE, message, throwable);
-    }
-
-    // 레벨 체크 메서드
-    public boolean isDebugEnabled() {
-        return logger.isLoggable(Level.FINE);
-    }
-
-    public boolean isInfoEnabled() {
-        return logger.isLoggable(Level.INFO);
-    }
-
-    public boolean isWarnEnabled() {
-        return logger.isLoggable(Level.WARNING);
-    }
-
-    public boolean isErrorEnabled() {
-        return logger.isLoggable(Level.SEVERE);
-    }
-
-    /**
-     * SLF4J 스타일 메시지 포맷팅 ({} 플레이스홀더 지원)
-     */
-    private String formatMessage(String message, Object... args) {
-        final String msg = String.valueOf(message); // null -> "null"
-        if (args == null || args.length == 0) {
-            return msg;
-        }
-
-        StringBuilder result = new StringBuilder();
-        int argIndex = 0;
-        int i = 0;
-
-        while (i < msg.length()) {
-            // 이스케이프된 플레이스홀더 처리: \{}
-            if (i <= msg.length() - 3 && msg.charAt(i) == '\\' && msg.charAt(i + 1) == '{' && msg.charAt(i + 2) == '}') {
-                result.append("{}");
-                i += 3;
-                continue;
-            }
-            if (i <= msg.length() - 2 && msg.charAt(i) == '{' && msg.charAt(i + 1) == '}') {
-                // {} 플레이스홀더 발견
-                if (argIndex < args.length) {
-                    result.append(formatArg(args[argIndex]));
-                    argIndex++;
-                } else {
-                    result.append("{}"); // 인자가 부족하면 그대로 유지
-                }
-                i += 2; // {} 건너뛰기
-            } else {
-                result.append(msg.charAt(i));
-                i++;
-            }
-        }
-
-        return result.toString();
-    }
-
-    private static String formatArg(Object arg) {
-        if (arg == null) return "null";
-        if (arg.getClass().isArray()) {
-            if (arg instanceof Object[]) return java.util.Arrays.deepToString((Object[]) arg);
-            if (arg instanceof int[]) return java.util.Arrays.toString((int[]) arg);
-            if (arg instanceof long[]) return java.util.Arrays.toString((long[]) arg);
-            if (arg instanceof double[]) return java.util.Arrays.toString((double[]) arg);
-            if (arg instanceof float[]) return java.util.Arrays.toString((float[]) arg);
-            if (arg instanceof boolean[]) return java.util.Arrays.toString((boolean[]) arg);
-            if (arg instanceof char[]) return java.util.Arrays.toString((char[]) arg);
-            if (arg instanceof byte[]) return java.util.Arrays.toString((byte[]) arg);
-            if (arg instanceof short[]) return java.util.Arrays.toString((short[]) arg);
-        }
-        return String.valueOf(arg);
-    }
+  @Override public boolean isErrorEnabled() { return delegate.isErrorEnabled(); }
 }

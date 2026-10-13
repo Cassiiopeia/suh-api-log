@@ -1,2 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-kr.suhsaechan.suhapilog.config.SuhApiLogAutoConfiguration
+org.springframework.boot.env.EnvironmentPostProcessor=\
+kr.suhsaechan.suhapilog.autoconfigure.SuhApiLogEnvironmentPostProcessor

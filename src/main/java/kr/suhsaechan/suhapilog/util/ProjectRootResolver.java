@@ -1,5 +1,10 @@
 package kr.suhsaechan.suhapilog.util;
 
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
+
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,7 +14,7 @@ import java.nio.file.Paths;
  * 멀티모듈 프로젝트에서 github-issues 폴더가 여러 모듈에 중복 생성되는 문제를 해결합니다.
  */
 public class ProjectRootResolver {
-    private static final SuhApiLogger log = SuhApiLogger.getLogger(ProjectRootResolver.class);
+    private static final SuhLogger log = SuhLog.getLogger(ProjectRootResolver.class);
 
     private ProjectRootResolver() {
         // 유틸리티 클래스

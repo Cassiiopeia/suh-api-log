@@ -1,0 +1,4 @@
+# JitPack 빌드 설정 — 태그(vX.Y.Z)를 받아 빌드해 com.github.Cassiiopeia:suh-api-log:vX.Y.Z 로 제공한다.
+# JitPack 기본 JDK는 8이라 toolchain(17)과 맞춰 둔다.
+jdk:
+  - openjdk17

@@ -1,13 +1,15 @@
 package kr.suhsaechan.suhapilog.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import kr.suhsaechan.suhapilog.spi.IssueRef;
 
 /**
- * GitHub 이슈 정보를 나타내는 모델 클래스
+ * 하위 호환용 shim.
+ *
+ * @deprecated 3.0.0부터 {@link IssueRef}로 대체되었다. 3.1.0에서 제거된다.
  */
-public class GithubIssue implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Deprecated(since = "3.0.0", forRemoval = true)
+public class GithubIssue {
 
   private Integer issueNumber;
   private String cleanTitle;
@@ -18,12 +20,23 @@ public class GithubIssue implements Serializable {
   public GithubIssue() {
   }
 
-  public GithubIssue(Integer issueNumber, String cleanTitle, String rawTitle, String pageUrl, LocalDateTime fetchedAt) {
+  public GithubIssue(Integer issueNumber, String cleanTitle, String rawTitle, String pageUrl,
+      LocalDateTime fetchedAt) {
     this.issueNumber = issueNumber;
     this.cleanTitle = cleanTitle;
     this.rawTitle = rawTitle;
     this.pageUrl = pageUrl;
     this.fetchedAt = fetchedAt;
+  }
+
+  /** 새 SPI 타입으로 변환한다. */
+  public IssueRef toIssueRef() {
+    return new IssueRef(issueNumber, cleanTitle, rawTitle, pageUrl, fetchedAt);
+  }
+
+  public static GithubIssue from(IssueRef ref) {
+    return new GithubIssue(ref.issueNumber(), ref.cleanTitle(), ref.rawTitle(),
+        ref.pageUrl(), ref.fetchedAt());
   }
 
   public Integer getIssueNumber() {
