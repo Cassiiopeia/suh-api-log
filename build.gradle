@@ -76,6 +76,16 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            // 버전 없는 의존성(Spring Boot BOM 관리)을 실제 해석된 버전으로 기록한다.
+            // 없으면 .module 에 버전이 비어 BOM 없는 Gradle 프로젝트가 jackson 등을 해석하지 못한다 (#25)
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
             pom {
                 name = 'suh-api-log'
                 description = '서새찬 API 로깅 라이브러리'
