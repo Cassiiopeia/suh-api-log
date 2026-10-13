@@ -1,0 +1,46 @@
+{
+  "templateVersion": "4.48.1",
+  "installedAt": "2026-10-13 13:10:17",
+  "files": {
+    "PROJECT-COMMON-CLOSE-ISSUES-ON-RELEASE.yaml": {
+      "installed": "sha256:46a27c3172768bdc1014f8ac015c9e803381c0f422214081128f295ec4ce50ce",
+      "rendered": "sha256:46a27c3172768bdc1014f8ac015c9e803381c0f422214081128f295ec4ce50ce"
+    },
+    "PROJECT-COMMON-QA-ISSUE-CREATION-BOT.yaml": {
+      "installed": "sha256:f389db9772ea2ea4f8cea17f085dfbcb7875de95f6430249bf393f4599c97549",
+      "rendered": "sha256:f389db9772ea2ea4f8cea17f085dfbcb7875de95f6430249bf393f4599c97549"
+    },
+    "PROJECT-COMMON-README-VERSION-UPDATE.yaml": {
+      "installed": "sha256:63a3cb5daa7943226552c84b4c1fbe60c35f0942e8e85a3556bf474802e65de9",
+      "rendered": "sha256:63a3cb5daa7943226552c84b4c1fbe60c35f0942e8e85a3556bf474802e65de9"
+    },
+    "PROJECT-COMMON-RELEASE-CHANGELOG.yaml": {
+      "installed": "sha256:b50ae7343bd1d20b139f36b705d2aa254ac2a7b0c625ca4f09c0128661ec7081",
+      "rendered": "sha256:b50ae7343bd1d20b139f36b705d2aa254ac2a7b0c625ca4f09c0128661ec7081"
+    },
+    "PROJECT-COMMON-SUH-ISSUE-HELPER.yaml": {
+      "installed": "sha256:bc1de988342d128378c093b6ae8be872dbd6da6921cc4b6fb47bf910f514e7a5",
+      "rendered": "sha256:bc1de988342d128378c093b6ae8be872dbd6da6921cc4b6fb47bf910f514e7a5"
+    },
+    "PROJECT-COMMON-SYNC-ISSUE-LABELS.yaml": {
+      "installed": "sha256:5cc522f2ece77939ea9fe65e8897bb0e008e7fb08afb424cf442d0398a80aeb0",
+      "rendered": "sha256:5cc522f2ece77939ea9fe65e8897bb0e008e7fb08afb424cf442d0398a80aeb0"
+    },
+    "PROJECT-COMMON-VERSION-CONTROL.yaml": {
+      "installed": "sha256:e555ac035b1ae82798b8fe7740d2f8ec78f8bc3ae6945a3de17a3d0049c6f1a5",
+      "rendered": "sha256:e555ac035b1ae82798b8fe7740d2f8ec78f8bc3ae6945a3de17a3d0049c6f1a5"
+    },
+    "PROJECT-SPRING-NEXUS-CI.yml": {
+      "installed": "sha256:5096d1909f12608f92e4a57aef40cb33fec4ec1e662fa8b4ff4799a13fc0b1c3",
+      "rendered": "sha256:5096d1909f12608f92e4a57aef40cb33fec4ec1e662fa8b4ff4799a13fc0b1c3"
+    },
+    "PROJECT-SPRING-NEXUS-PUBLISH.yml": {
+      "installed": "sha256:d4517e45b5f6bd26471fb52b88cce1223101e090ba04aa22990289744ba5885f",
+      "rendered": "sha256:d4517e45b5f6bd26471fb52b88cce1223101e090ba04aa22990289744ba5885f"
+    },
+    "PROJECT-COMMON-PROJECTS-SYNC-MANAGER.yaml": {
+      "installed": "sha256:2c73e8737700f4ddfc9942580783e03360197d7c6333dd85129831d22bcc56e9",
+      "rendered": "sha256:2c73e8737700f4ddfc9942580783e03360197d7c6333dd85129831d22bcc56e9"
+    }
+  }
+}

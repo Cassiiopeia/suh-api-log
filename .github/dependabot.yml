@@ -1,8 +1,10 @@
 # 의존성 자동 갱신 — PR 폭주를 막기 위해 월 1회, 생태계별로 묶어서 올린다.
+# 개발 브랜치(develop)로 PR 을 보낸다. main 은 릴리스 PR 로만 들어간다.
 version: 2
 updates:
   - package-ecosystem: "gradle"
     directory: "/"
+    target-branch: "develop"
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
@@ -13,6 +15,7 @@ updates:
 
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "develop"
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
