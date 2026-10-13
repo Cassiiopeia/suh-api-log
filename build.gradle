@@ -63,6 +63,9 @@ bootJar { enabled = false }
 
 jar {
     enabled = true
+    // Spring Boot 플러그인은 bootJar 와 구분하려고 jar 에 'plain' 분류자를 붙인다.
+    // 그대로 두면 -plain.jar 만 배포되고 pom 이 packaging=pom 이 되어 Maven 사용자가 jar 를 받지 못한다.
+    archiveClassifier = ''
     manifest {
         attributes('Implementation-Title': 'suh-api-log',
                    'Implementation-Version': project.version)
