@@ -19,9 +19,9 @@
     }
 
     dependencies {
-        implementation 'com.github.Cassiiopeia:suh-api-log:v3.0.2'
-        // Swagger UI 통합을 쓴다면 springdoc 을 직접 선언합니다 (3.0.0부터)
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+        implementation 'com.github.Cassiiopeia:suh-api-log:v3.1.0'
+        // Swagger UI 통합을 쓴다면 springdoc 을 직접 선언합니다 (아래 표 참고)
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.9.1'
     }
     ```
 
@@ -38,7 +38,7 @@
     <dependency>
         <groupId>com.github.Cassiiopeia</groupId>
         <artifactId>suh-api-log</artifactId>
-        <version>v3.0.2</version>
+        <version>v3.1.0</version>
     </dependency>
     ```
 
@@ -55,8 +55,8 @@
     }
 
     dependencies {
-        implementation 'kr.suhsaechan:suh-api-log:3.0.2'
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+        implementation 'kr.suhsaechan:suh-api-log:3.1.0'
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.9.1'
     }
     ```
 
@@ -73,9 +73,17 @@
     <dependency>
         <groupId>kr.suhsaechan</groupId>
         <artifactId>suh-api-log</artifactId>
-        <version>3.0.2</version>
+        <version>3.1.0</version>
     </dependency>
     ```
+
+!!! info "Spring Boot 버전별 springdoc"
+    | Spring Boot | springdoc-openapi-starter-webmvc-ui |
+    |-------------|-------------------------------------|
+    | 3.x | 2.x (예: `2.9.1`) |
+    | 4.x | 3.x (예: `3.1.1`) |
+
+    SUH API Log 자체는 같은 jar 하나로 두 버전을 모두 지원합니다.
 
 !!! tip "최신 버전"
     최신 버전은 [GitHub Releases](https://github.com/Cassiiopeia/suh-api-log/releases)와

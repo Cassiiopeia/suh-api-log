@@ -9,8 +9,8 @@ Swagger UI 통합을 쓴다면 직접 선언하세요.
 
 ```groovy
 dependencies {
-    implementation 'kr.suhsaechan:suh-api-log:3.0.2'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+    implementation 'kr.suhsaechan:suh-api-log:3.1.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.9.1'   // Boot 4 라면 3.1.1
 }
 ```
 

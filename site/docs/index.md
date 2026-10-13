@@ -31,13 +31,13 @@ public List<User> getUsers() { ... }
 
 ## 이럴 때 맞습니다
 
-- Spring Boot 3.x + springdoc 으로 Swagger UI를 이미 쓰고 있다
+- Spring Boot 3.x / 4.x + springdoc 으로 Swagger UI를 이미 쓰고 있다
 - 프론트엔드·QA 팀원이 "이 API 언제 왜 바뀌었지?"를 Swagger에서 바로 보길 원한다
 - 변경 이력을 GitHub 이슈와 연결해 관리한다
 
 ## 이럴 땐 맞지 않습니다
 
-- **Spring Boot 2.x / Java 8~16** — 지원하지 않습니다 (Java 17+, Spring Boot 3.x).
+- **Spring Boot 2.x / Java 8~16** — 지원하지 않습니다 (Java 17+, Spring Boot 3.x / 4.x).
 - **WebFlux 전용 springdoc**(`springdoc-openapi-starter-webflux-ui`) — 현재 WebMVC 기준으로만 검증했습니다.
 - **API 버전별 스펙 비교(diff)가 필요할 때** — 이 라이브러리는 사람이 적은 변경 기록을 보여 줄 뿐, OpenAPI 스펙 간 차이를 계산하지 않습니다. 그 용도에는 openapi-diff 같은 도구가 맞습니다.
 - **비공개 GitHub 레포의 이슈 제목** — 기본 조회기는 공개 이슈 페이지를 읽습니다. 비공개 레포는 [IssueFetcher를 직접 구현](extending.md)해야 합니다.
@@ -45,5 +45,7 @@ public List<User> getUsers() { ... }
 ## 요구사항
 
 - Java 17 이상
-- Spring Boot 3.x
-- (선택) springdoc-openapi 2.x — Swagger UI 통합을 쓸 때
+- Spring Boot 3.x 또는 4.x
+- (선택) springdoc-openapi — Boot 3이면 2.x, Boot 4면 3.x (Swagger UI 통합을 쓸 때)
+
+두 버전 모두 같은 예제 앱(`examples/demo`, `examples/demo-boot4`)을 CI에서 실제로 띄워 확인합니다.

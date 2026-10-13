@@ -30,7 +30,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # workflow_run 은 기본 브랜치 HEAD 를 받는다 — 버전 커밋까지 반영된 version.yml 을 읽기 위해 명시
           ref: main

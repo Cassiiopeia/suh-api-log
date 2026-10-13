@@ -10,7 +10,7 @@
 
 [![Nexus](https://img.shields.io/badge/Nexus-버전_목록-4E9BCD?style=flat-square&logo=sonatype&logoColor=white)](https://nexus.suhsaechan.kr/#browse/browse:maven-releases:kr%2Fsuhsaechan%2Fsuh-api-log)
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=flat-square&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x%20%7C%204.x-6DB33F?style=flat-square&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE.md)
 [![JitPack](https://jitpack.io/v/Cassiiopeia/suh-api-log.svg)](https://jitpack.io/#Cassiiopeia/suh-api-log)
 [![Docs](https://img.shields.io/badge/문서-GitHub_Pages-3F51B5?style=flat-square&logo=materialformkdocs&logoColor=white)](https://cassiiopeia.github.io/suh-api-log/)
@@ -63,9 +63,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Cassiiopeia:suh-api-log:v3.0.2'
-    // Swagger UI 통합을 쓴다면 springdoc 을 직접 선언 (3.0.0부터)
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+    implementation 'com.github.Cassiiopeia:suh-api-log:v3.1.0'
+    // Swagger UI 통합을 쓴다면 springdoc 을 직접 선언 (Boot 3 → 2.x, Boot 4 → 3.x)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.9.1'
 }
 ```
 
@@ -81,7 +81,7 @@ dependencies {
 <dependency>
     <groupId>com.github.Cassiiopeia</groupId>
     <artifactId>suh-api-log</artifactId>
-    <version>v3.0.2</version>
+    <version>v3.1.0</version>
 </dependency>
 ```
 
@@ -95,7 +95,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'kr.suhsaechan:suh-api-log:3.0.2'
+    implementation 'kr.suhsaechan:suh-api-log:3.1.0'
 }
 ```
 
@@ -307,9 +307,9 @@ public IssueFetcher gitlabIssueFetcher() {
 
 ```groovy
 dependencies {
-    implementation 'kr.suhsaechan:suh-api-log:3.0.2'
+    implementation 'kr.suhsaechan:suh-api-log:3.1.0'
     // Swagger 통합을 쓴다면 직접 선언
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.9.1'   // Boot 4 라면 3.1.1
 }
 ```
 
@@ -340,8 +340,8 @@ dependencies {
 ## 🔧 요구사항
 
 - **Java**: 17 이상
-- **Spring Boot**: 3.x
-- **선택사항**: SpringDoc OpenAPI UI 2.x+ (Swagger UI 통합)
+- **Spring Boot**: 3.x, 4.x (두 버전 모두 CI에서 실제 기동으로 확인)
+- **선택사항**: springdoc-openapi — Boot 3이면 2.x, Boot 4면 3.x (Swagger UI 통합)
 
 ---
 
