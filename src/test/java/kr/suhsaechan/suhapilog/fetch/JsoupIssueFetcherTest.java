@@ -76,6 +76,35 @@ class JsoupIssueFetcherTest {
   }
 
   @Test
+  void 재시도_중_interrupt되면_남은_재시도를_중단하고_실패로_기억하지_않는다() {
+    AtomicInteger calls = new AtomicInteger();
+    JsoupIssueFetcher fetcher = new JsoupIssueFetcher(BASE, new DefaultTitleNormalizer(),
+        new Options(Duration.ofSeconds(1), 3, Duration.ofMillis(50), "suh-api-log/test",
+            Duration.ofMinutes(10))) {
+      @Override
+      protected String fetchRawTitle(String url) throws IOException {
+        // 첫 시도 실패 + 앱 종료 신호(interrupt)
+        if (calls.incrementAndGet() == 1) {
+          Thread.currentThread().interrupt();
+          throw new IOException("연결 실패");
+        }
+        return "제목 · Issue #17 · o/r";
+      }
+    };
+
+    try {
+      assertThat(fetcher.fetch(17)).isEmpty();
+      assertThat(calls.get()).isEqualTo(1);
+    } finally {
+      Thread.interrupted(); // 다른 테스트로 interrupt 상태가 새지 않게
+    }
+
+    // 실패로 기억하지 않았으므로 다음 조회는 바로 네트워크로 나간다
+    assertThat(fetcher.fetch(17)).isPresent();
+    assertThat(calls.get()).isEqualTo(2);
+  }
+
+  @Test
   void 실패한_이슈는_negative_TTL_동안_재요청하지_않는다() {
     StubFetcher fetcher = new StubFetcher(null, true, fastOptions(1, Duration.ofMinutes(10)));
 

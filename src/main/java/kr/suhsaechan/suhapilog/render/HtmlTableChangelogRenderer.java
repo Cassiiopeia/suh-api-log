@@ -8,10 +8,7 @@ import kr.suhsaechan.suhapilog.spi.ApiLogEntry;
 import kr.suhsaechan.suhapilog.spi.ChangelogRenderer;
 
 /**
- * 변경 이력을 HTML 표로 렌더링하는 기본 구현.
- *
- * <p>레거시에서는 이 로직이 GithubIssueService와 SwaggerIntegration에 두 벌 있었고
- * 이스케이프 규칙마저 달랐다(한쪽은 따옴표를 막지 않았다). 한 벌로 통합한다.
+ * 변경 이력 > HTML 표 기본 구현 (표 생성·이스케이프 규칙 단일 원본)
  */
 public class HtmlTableChangelogRenderer implements ChangelogRenderer {
 

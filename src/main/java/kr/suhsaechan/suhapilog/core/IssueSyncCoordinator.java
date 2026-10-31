@@ -16,8 +16,7 @@ import kr.suhsaechan.suhapilog.spi.IssueRepository;
 /**
  * 부팅 시 이슈 캐시를 워밍업한다.
  *
- * <p>레거시는 해시를 계산해 저장만 하고 아무도 읽지 않아, 변경이 없어도 매 기동마다
- * 전량을 재조회했다. 이제 해시가 같고 캐시가 온전하면 네트워크 요청을 0회로 만든다.
+ * <p>이슈 번호 해시가 같고 캐시가 온전하면 네트워크 요청 0회
  */
 public class IssueSyncCoordinator {
 

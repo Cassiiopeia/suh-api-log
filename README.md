@@ -6,7 +6,7 @@
 
 <!-- 수정하지마세요 자동으로 동기화 됩니다 -->
 <!-- AUTO-VERSION-SECTION: DO NOT EDIT MANUALLY -->
-## 최신 버전 : v3.0.3 (2026-10-13)
+## 최신 버전 : v3.1.0 (2026-10-13)
 
 [![Nexus](https://img.shields.io/badge/Nexus-버전_목록-4E9BCD?style=flat-square&logo=sonatype&logoColor=white)](https://nexus.suhsaechan.kr/#browse/browse:maven-releases:kr%2Fsuhsaechan%2Fsuh-api-log)
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
@@ -319,8 +319,8 @@ dependencies {
 | `org.reflections` 의존성 제거 | 이 라이브러리를 경유해 쓰던 곳은 직접 선언 |
 | `CommonUtil`·`SuhTimeUtil` 제거 | 대체 없음 (이 라이브러리와 무관한 코드였음) |
 | `config` → `autoconfigure` 패키지 이동 | `ApiChangeLogProperties` 직접 참조 시 import 수정 |
-| `SuhApiLogger` → `SuhLog` | 당장은 동작(`@Deprecated`). 3.1.0 전까지 이관 |
-| `GithubIssue` → `IssueRef` | 당장은 동작(`@Deprecated`). 3.1.0 전까지 이관 |
+| `SuhApiLogger` → `SuhLog` | 당장은 동작(`@Deprecated`). 4.0.0 전까지 이관 |
+| `GithubIssue` → `IssueRef` | 당장은 동작(`@Deprecated`). 4.0.0 전까지 이관 |
 | `base-url` 미설정 시 부팅 실패 → 경고 | 기존 동작을 원하면 `suhapilog.github.fail-fast: true` |
 | 로깅 exclude 제거 / 라이브러리 `application.yml` 제거 | 대응 불필요 — 오히려 상위 로깅 설정이 정상 적용됩니다 |
 
@@ -334,6 +334,15 @@ dependencies {
 | `IllegalStateException` | 저장소 디렉토리 생성 실패 | `suhapilog.storage.path` 경로 권한 확인 |
 
 > 이슈 조회 실패는 예외를 던지지 않습니다. 경고 로그를 남기고 해당 칸만 비웁니다.
+
+---
+
+## 🙅 이럴 땐 맞지 않습니다
+
+- **Spring Boot 2.x 또는 Java 17 미만** 프로젝트에서는 쓸 수 없습니다.
+- **API 스펙 버전 간 차이를 자동으로 비교하고 싶다면** 이 라이브러리로는 안 됩니다. 변경 이력은 사람이 단 어노테이션을 그대로 보여줄 뿐, OpenAPI 스펙을 비교하지 않습니다. 그 용도에는 OpenAPI diff 도구가 맞습니다.
+- **비공개 레포 이슈 제목을 별도 설정 없이 가져오고 싶다면** 안 됩니다. 기본 조회기는 공개 이슈 페이지만 읽습니다. 비공개 레포는 `IssueFetcher`를 직접 구현해 등록해야 합니다.
+- **springdoc 없이 Swagger UI에 표시하고 싶다면** 안 됩니다. 표는 springdoc의 오퍼레이션 설명에 붙습니다. springdoc이 없으면 `ChangelogService`로 표 HTML만 직접 받아 쓸 수 있습니다.
 
 ---
 

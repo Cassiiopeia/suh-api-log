@@ -6,10 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 여러 API 변경 이력을 그룹화하는 컨테이너 어노테이션
- *
- * @ApiLog에 @Repeatable이 적용되어 있으므로, 이 컨테이너는 자동으로 사용됩니다.
- * 명시적으로 사용할 필요가 없습니다.
+ * &#64;ApiLog 반복 선언용 컨테이너 (&#64;Repeatable 자동 사용, 직접 선언 불필요)
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

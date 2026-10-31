@@ -10,10 +10,8 @@ import org.springframework.web.method.HandlerMethod;
 /**
  * Swagger UI의 오퍼레이션 설명에 변경 이력 표를 덧붙인다.
  *
- * <p>레거시는 springdoc 의존 여부를 몰라 리플렉션 Proxy로 인터페이스를 구현하고
- * 빈 타입을 Object로 선언했다. 그 탓에 springdoc의 타입 기반 빈 수집에서 누락될
- * 위험이 있었다. 이제 &#64;ConditionalOnClass가 클래스패스 존재를 보장하므로
- * 인터페이스를 직접 구현한다.
+ * <p>&#64;ConditionalOnClass로 springdoc 존재가 보장된 경우에만 등록 > 인터페이스 직접 구현
+ * (springdoc 타입 기반 빈 수집 대상)
  */
 public class SpringDocOperationCustomizer implements OperationCustomizer {
 

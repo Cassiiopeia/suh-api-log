@@ -43,8 +43,7 @@ public final class ControllerScanner {
   }
 
   /**
-   * CGLIB 프록시라면 원본 클래스를 돌려준다.
-   * 레거시의 {@code getName().contains("$$")} 문자열 검사보다 정확하다.
+   * CGLIB 프록시 > 원본 클래스 (Spring ClassUtils 기준, 클래스 이름 검사 대신)
    */
   public static Class<?> unwrap(Class<?> candidate) {
     return ClassUtils.getUserClass(candidate);

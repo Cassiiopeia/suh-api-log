@@ -12,9 +12,7 @@ import kr.suhsaechan.suhapilog.spi.IssueRef;
 /**
  * &#64;ApiLog 어노테이션을 렌더링 가능한 엔트리로 정규화한다.
  *
- * <p>author 기본값 폴백이 실제로 적용되는 유일한 지점이다. 레거시는 폴백 값을
- * 계산해두고 출력 시에는 어노테이션 값을 그대로 써서 default-author 설정이
- * 동작하지 않았다.
+ * <p>author 기본값(default-author) 폴백 적용 지점은 여기 한 곳
  */
 public class ChangelogService {
 

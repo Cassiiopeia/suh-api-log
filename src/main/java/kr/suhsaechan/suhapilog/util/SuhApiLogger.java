@@ -6,7 +6,7 @@ import kr.suhsaechan.suhapilog.logging.SuhLogger;
 /**
  * 하위 호환용 shim.
  *
- * @deprecated 3.0.0부터 {@link SuhLog}로 대체되었다. 이 클래스는 3.1.0에서 제거된다.
+ * @deprecated 3.0.0부터 {@link SuhLog}로 대체되었다. 이 클래스는 4.0.0에서 제거된다.
  *     기존 JUL 직접 사용과 달리, 이제 상위 프로젝트의 로깅 백엔드에 위임한다.
  */
 @Deprecated(since = "3.0.0", forRemoval = true)

@@ -17,15 +17,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 /**
- * GitHub 이슈 페이지의 title을 스크래핑하는 기본 조회 구현.
- *
- * <p>레거시 대비 달라진 점:
- * <ul>
- *   <li>timeout 설정 — 기존에는 무제한이라 GitHub가 느리면 부팅이 매달렸다</li>
- *   <li>재시도 + 백오프</li>
- *   <li>negative cache — 실패한 이슈를 Swagger 열 때마다 재요청하던 문제 차단</li>
- *   <li>예외를 던지지 않고 Optional.empty() 반환 — 상위 앱을 죽이지 않는다</li>
- * </ul>
+ * GitHub 이슈 페이지 title 스크래핑: 요청(timeout) > 재시도·백오프 > 실패 기억(negative cache)
+ * 실패해도 예외 대신 Optional.empty() (상위 앱 보호)
  */
 public class JsoupIssueFetcher implements IssueFetcher {
 
@@ -48,7 +41,7 @@ public class JsoupIssueFetcher implements IssueFetcher {
           Duration.ofSeconds(5),
           2,
           Duration.ofMillis(500),
-          "suh-api-log/" + SuhApiLogVersion.get(),
+          defaultUserAgent(),
           Duration.ofMinutes(10));
     }
   }
@@ -57,6 +50,11 @@ public class JsoupIssueFetcher implements IssueFetcher {
   private final TitleNormalizer titleNormalizer;
   private final Options options;
   private final Map<Integer, Instant> failedAt = new ConcurrentHashMap<>();
+
+  /** 기본 User-Agent: suh-api-log/{라이브러리 버전} */
+  public static String defaultUserAgent() {
+    return "suh-api-log/" + SuhApiLogVersion.get();
+  }
 
   public JsoupIssueFetcher(String baseUrl, TitleNormalizer titleNormalizer, Options options) {
     this.baseUrl = baseUrl;
@@ -91,6 +89,10 @@ public class JsoupIssueFetcher implements IssueFetcher {
         log.debug("이슈 {} 조회 {}/{} 실패: {}", issueNumber, attempt, attempts, e.getMessage());
         if (attempt < attempts) {
           sleepBackoff();
+          // 종료 중(interrupt)이면 남은 재시도 중단, 조회 실패로 기억하지 않음
+          if (Thread.currentThread().isInterrupted()) {
+            return Optional.empty();
+          }
         }
       }
     }
@@ -102,11 +104,11 @@ public class JsoupIssueFetcher implements IssueFetcher {
 
   /** 네트워크 경계. 테스트에서 오버라이드한다. */
   protected String fetchRawTitle(String url) throws IOException {
-    Document doc = Jsoup.connect(url)
+    Document document = Jsoup.connect(url)
         .userAgent(options.userAgent())
         .timeout((int) options.timeout().toMillis())
         .get();
-    return doc.select("title").text();
+    return document.select("title").text();
   }
 
   private boolean isNegativelyCached(int issueNumber) {
@@ -114,11 +116,11 @@ public class JsoupIssueFetcher implements IssueFetcher {
     if (ttl == null || ttl.isZero() || ttl.isNegative()) {
       return false;
     }
-    Instant at = failedAt.get(issueNumber);
-    if (at == null) {
+    Instant failedInstant = failedAt.get(issueNumber);
+    if (failedInstant == null) {
       return false;
     }
-    if (Instant.now().isBefore(at.plus(ttl))) {
+    if (Instant.now().isBefore(failedInstant.plus(ttl))) {
       return true;
     }
     failedAt.remove(issueNumber); // TTL이 지났으면 다시 시도할 기회를 준다
