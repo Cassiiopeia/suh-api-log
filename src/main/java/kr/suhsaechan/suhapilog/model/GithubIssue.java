@@ -6,7 +6,7 @@ import kr.suhsaechan.suhapilog.spi.IssueRef;
 /**
  * 하위 호환용 shim.
  *
- * @deprecated 3.0.0부터 {@link IssueRef}로 대체되었다. 3.1.0에서 제거된다.
+ * @deprecated 3.0.0부터 {@link IssueRef}로 대체되었다. 4.0.0에서 제거된다.
  */
 @Deprecated(since = "3.0.0", forRemoval = true)
 public class GithubIssue {
