@@ -1,96 +1,69 @@
 package kr.suhsaechan.suhapilog.util;
 
-import kr.suhsaechan.suhapilog.logging.SuhLog;
-import kr.suhsaechan.suhapilog.logging.SuhLogger;
-
-import kr.suhsaechan.suhapilog.logging.SuhLog;
-import kr.suhsaechan.suhapilog.logging.SuhLogger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import kr.suhsaechan.suhapilog.logging.SuhLog;
+import kr.suhsaechan.suhapilog.logging.SuhLogger;
 
 /**
- * 프로젝트 루트 경로를 탐색하고 저장 경로를 해석하는 유틸리티 클래스.
- * 멀티모듈 프로젝트에서 github-issues 폴더가 여러 모듈에 중복 생성되는 문제를 해결합니다.
+ * 프로젝트 루트 탐색, 저장 경로 해석
+ * 상대 경로 > 프로젝트 루트 기준 (멀티모듈에서 모듈마다 github-issues 폴더가 생기지 않게)
  */
-public class ProjectRootResolver {
-    private static final SuhLogger log = SuhLog.getLogger(ProjectRootResolver.class);
+public final class ProjectRootResolver {
 
-    private ProjectRootResolver() {
-        // 유틸리티 클래스
+  private static final SuhLogger log = SuhLog.getLogger(ProjectRootResolver.class);
+
+  // 저장 경로 미설정 시 기본 폴더 (프로젝트 루트 기준)
+  private static final String DEFAULT_STORAGE_DIRECTORY = "github-issues";
+
+  private ProjectRootResolver() {
+  }
+
+  /**
+   * working directory부터 상위로 루트 마커 탐색
+   * 우선순위 3개: settings.gradle(.kts) > .git > 못 찾으면 working directory
+   */
+  public static Path resolveProjectRoot() {
+    Path workingDirectory = Paths.get("").toAbsolutePath();
+    Path searchPath = workingDirectory;
+    log.debug("프로젝트 루트 탐색 시작 - working directory: {}", workingDirectory);
+
+    while (searchPath != null) {
+      if (hasGradleSettings(searchPath)) {
+        log.debug("프로젝트 루트 발견 (settings.gradle): {}", searchPath);
+        return searchPath;
+      }
+      if (Files.exists(searchPath.resolve(".git"))) {
+        log.debug("프로젝트 루트 발견 (.git): {}", searchPath);
+        return searchPath;
+      }
+      searchPath = searchPath.getParent();
     }
 
-    /**
-     * 프로젝트 루트 디렉토리를 탐색합니다.
-     * 현재 working directory부터 상위로 올라가며 프로젝트 루트 마커를 찾습니다.
-     *
-     * <p>탐색 우선순위:</p>
-     * <ol>
-     *   <li>settings.gradle 또는 settings.gradle.kts 존재 (Gradle 멀티모듈 프로젝트)</li>
-     *   <li>.git 디렉토리 존재 (Git 루트)</li>
-     *   <li>찾지 못하면 현재 working directory 사용</li>
-     * </ol>
-     *
-     * @return 프로젝트 루트 경로
-     */
-    public static Path resolveProjectRoot() {
-        Path current = Paths.get("").toAbsolutePath();
-        Path searchPath = current;
-        log.debug("프로젝트 루트 탐색 시작 - 현재 working directory: {}", current);
+    log.debug("프로젝트 루트를 찾지 못해 working directory 사용: {}", workingDirectory);
+    return workingDirectory;
+  }
 
-        while (searchPath != null) {
-            // Gradle 멀티모듈 프로젝트 (settings.gradle 존재)
-            if (Files.exists(searchPath.resolve("settings.gradle")) ||
-                Files.exists(searchPath.resolve("settings.gradle.kts"))) {
-                log.debug("프로젝트 루트 발견 (settings.gradle): {}", searchPath);
-                return searchPath;
-            }
-            // Git 루트 (.git 디렉토리 존재)
-            if (Files.exists(searchPath.resolve(".git"))) {
-                log.debug("프로젝트 루트 발견 (.git): {}", searchPath);
-                return searchPath;
-            }
-            searchPath = searchPath.getParent();
-        }
+  /**
+   * 설정 경로 > 절대 경로
+   * null·빈 값 > 기본 폴더, 절대 경로 > 그대로, 상대 경로 > 프로젝트 루트 기준
+   */
+  public static Path resolveStoragePath(String configuredPath) {
+    String storagePath = (configuredPath == null || configuredPath.isEmpty())
+        ? DEFAULT_STORAGE_DIRECTORY
+        : configuredPath;
 
-        // 찾지 못하면 현재 디렉토리 사용
-        log.debug("프로젝트 루트를 찾지 못함 - 현재 디렉토리 사용: {}", current);
-        return current;
-    }
+    Path path = Paths.get(storagePath);
+    Path resolved = path.isAbsolute()
+        ? path.normalize()
+        : resolveProjectRoot().resolve(storagePath).normalize();
+    log.debug("저장 경로 해석: {} -> {}", configuredPath, resolved);
+    return resolved;
+  }
 
-    /**
-     * 설정된 저장 경로를 프로젝트 루트 기준 절대 경로로 변환합니다.
-     *
-     * <p>동작 방식:</p>
-     * <ul>
-     *   <li>null 또는 빈 문자열: 기본값 "github-issues" 사용</li>
-     *   <li>절대 경로: 그대로 사용</li>
-     *   <li>상대 경로: 프로젝트 루트 기준으로 변환</li>
-     * </ul>
-     *
-     * @param configuredPath 설정된 경로 (null, 상대 경로, 절대 경로 모두 가능)
-     * @return 절대 경로
-     */
-    public static Path resolveStoragePath(String configuredPath) {
-        log.debug("저장 경로 해석 시작 - 설정값: {}", configuredPath);
-
-        if (configuredPath == null || configuredPath.isEmpty()) {
-            configuredPath = "github-issues";
-            log.debug("설정값이 비어있어 기본값 사용: {}", configuredPath);
-        }
-
-        Path path = Paths.get(configuredPath);
-
-        // 절대 경로면 그대로 사용
-        if (path.isAbsolute()) {
-            Path resolved = path.normalize();
-            log.debug("절대 경로 사용: {}", resolved);
-            return resolved;
-        }
-
-        // 상대 경로면 프로젝트 루트 기준으로 변환
-        Path resolved = resolveProjectRoot().resolve(configuredPath).normalize();
-        log.debug("상대 경로를 프로젝트 루트 기준으로 변환: {}", resolved);
-        return resolved;
-    }
+  private static boolean hasGradleSettings(Path directory) {
+    return Files.exists(directory.resolve("settings.gradle"))
+        || Files.exists(directory.resolve("settings.gradle.kts"));
+  }
 }

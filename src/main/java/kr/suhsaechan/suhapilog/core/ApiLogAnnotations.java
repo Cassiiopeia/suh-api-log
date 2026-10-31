@@ -11,8 +11,7 @@ import org.springframework.core.annotation.MergedAnnotations;
 /**
  * &#64;ApiLog 탐색을 한 곳으로 모은다.
  *
- * <p>레거시는 스캔 경로와 Swagger 경로가 서로 다른 방식(수동 인터페이스 순회 vs
- * MergedAnnotations)을 써서 결과가 어긋날 수 있었다. TYPE_HIERARCHY 한 가지로 통일한다.
+ * <p>부팅 스캔·Swagger 렌더 공통 (TYPE_HIERARCHY 하나로 결과 일치)
  */
 public final class ApiLogAnnotations {
 

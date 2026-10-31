@@ -73,7 +73,7 @@ public class ApiChangeLogProperties {
 
   /** 부팅 시 이슈 동기화 방식 */
   public enum StartupMode {
-    /** 동기화가 끝날 때까지 부팅을 막는다 (레거시 동작) */
+    /** 동기화가 끝날 때까지 부팅을 막는다 (2.x 동작) */
     BLOCKING,
     /** 백그라운드로 워밍업한다. 그 사이 요청은 지연 조회가 커버한다 (기본값) */
     ASYNC,
@@ -142,7 +142,7 @@ public class ApiChangeLogProperties {
 
     private StartupMode startupMode = StartupMode.ASYNC;
 
-    /** true면 base-url 미설정 시 예외를 던져 부팅을 중단한다 (레거시 동작) */
+    /** true면 base-url 미설정 시 예외를 던져 부팅을 중단한다 (2.x 동작) */
     private boolean failFast = false;
 
     private Retry retry = new Retry();

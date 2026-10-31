@@ -14,37 +14,37 @@ final class JulMessageFormatter {
   }
 
   static String format(String message, Object... args) {
-    final String msg = String.valueOf(message); // null -> "null"
+    final String pattern = String.valueOf(message); // null -> "null"
     if (args == null || args.length == 0) {
-      return msg;
+      return pattern;
     }
 
-    StringBuilder result = new StringBuilder(msg.length() + 16 * args.length);
+    StringBuilder formatted = new StringBuilder(pattern.length() + 16 * args.length);
     int argIndex = 0;
     int i = 0;
 
-    while (i < msg.length()) {
+    while (i < pattern.length()) {
       // 이스케이프된 플레이스홀더 \{} 는 리터럴 {} 로 남긴다
-      if (i <= msg.length() - 3 && msg.charAt(i) == '\\' && msg.charAt(i + 1) == '{'
-          && msg.charAt(i + 2) == '}') {
-        result.append("{}");
+      if (i <= pattern.length() - 3 && pattern.charAt(i) == '\\' && pattern.charAt(i + 1) == '{'
+          && pattern.charAt(i + 2) == '}') {
+        formatted.append("{}");
         i += 3;
         continue;
       }
-      if (i <= msg.length() - 2 && msg.charAt(i) == '{' && msg.charAt(i + 1) == '}') {
+      if (i <= pattern.length() - 2 && pattern.charAt(i) == '{' && pattern.charAt(i + 1) == '}') {
         if (argIndex < args.length) {
-          result.append(formatArg(args[argIndex++]));
+          formatted.append(formatArg(args[argIndex++]));
         } else {
-          result.append("{}"); // 인자가 부족하면 그대로 유지
+          formatted.append("{}"); // 인자가 부족하면 그대로 유지
         }
         i += 2;
       } else {
-        result.append(msg.charAt(i));
+        formatted.append(pattern.charAt(i));
         i++;
       }
     }
 
-    return result.toString();
+    return formatted.toString();
   }
 
   private static String formatArg(Object arg) {

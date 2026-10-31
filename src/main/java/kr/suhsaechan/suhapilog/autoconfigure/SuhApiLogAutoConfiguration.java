@@ -20,7 +20,6 @@ import kr.suhsaechan.suhapilog.spi.IssueRepository;
 import kr.suhsaechan.suhapilog.spi.TitleNormalizer;
 import kr.suhsaechan.suhapilog.storage.JsonIssueRepository;
 import kr.suhsaechan.suhapilog.util.ProjectRootResolver;
-import kr.suhsaechan.suhapilog.util.SuhApiLogVersion;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -69,7 +68,7 @@ public class SuhApiLogAutoConfiguration {
       TitleNormalizer titleNormalizer) {
     ApiChangeLogProperties.Github github = properties.getGithub();
     String userAgent = (github.getUserAgent() == null || github.getUserAgent().isBlank())
-        ? "suh-api-log/" + SuhApiLogVersion.get()
+        ? JsoupIssueFetcher.defaultUserAgent()
         : github.getUserAgent();
 
     JsoupIssueFetcher.Options options = new JsoupIssueFetcher.Options(
@@ -168,8 +167,7 @@ public class SuhApiLogAutoConfiguration {
   /**
    * 컨트롤러 클래스를 수집한다.
    *
-   * <p>빈 인스턴스가 아니라 빈 <b>정의</b>의 타입을 읽어, 레거시처럼 모든 컨트롤러를
-   * 강제로 조기 초기화하지 않는다.
+   * <p>빈 인스턴스가 아니라 빈 <b>정의</b>의 타입을 읽는다 (컨트롤러 조기 초기화 방지)
    */
   private Class<?>[] collectControllerClasses(ApplicationContext context) {
     Set<Class<?>> classes = new LinkedHashSet<>();

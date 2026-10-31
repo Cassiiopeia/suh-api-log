@@ -164,17 +164,17 @@ public class JsonIssueRepository implements IssueRepository {
     writeLock.lock();
     try {
       Path target = this.storageLocation.resolve(fileName);
-      Path temp = this.storageLocation.resolve(fileName + ".tmp");
+      Path tempFile = this.storageLocation.resolve(fileName + ".tmp");
 
       String json = objectMapper.writeValueAsString(payload);
-      Files.writeString(temp, json, StandardCharsets.UTF_8);
+      Files.writeString(tempFile, json, StandardCharsets.UTF_8);
 
       try {
-        Files.move(temp, target,
+        Files.move(tempFile, target,
             StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
       } catch (AtomicMoveNotSupportedException e) {
         // 일부 파일시스템(네트워크 마운트 등)은 원자적 이동을 지원하지 않는다
-        Files.move(temp, target, StandardCopyOption.REPLACE_EXISTING);
+        Files.move(tempFile, target, StandardCopyOption.REPLACE_EXISTING);
       }
       return true;
     } catch (Exception e) {
