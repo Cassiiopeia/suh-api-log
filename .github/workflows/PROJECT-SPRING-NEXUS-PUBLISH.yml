@@ -10,10 +10,9 @@
 name: PROJECT-SPRING-NEXUS-PUBLISH
 
 on:
+  # main push 한 곳에서만 배포 (태그 push까지 받으면 같은 버전 재배포 > Nexus 400)
   push:
     branches: ["main"]
-    tags:
-      - 'v*.*.*'
 
 permissions:
   # Nexus 로 올리기만 한다 — 저장소를 읽는 것 외에 GITHUB_TOKEN 권한이 필요 없다 (#595).
